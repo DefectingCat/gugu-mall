@@ -1,24 +1,14 @@
 # gugu-mall
 
-## Project setup
-```
-npm install
-```
+supermall 的高清重制版！
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+尝试了一些新的技术：
 
-### Compiles and minifies for production
-```
-npm run build
-```
+* Vue3
+* TypeScript
+* SCSS
+* viewport
 
-### Lints and fixes files
-```
-npm run lint
-```
+尝试了一些新的 UI 库：
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+* vant UI

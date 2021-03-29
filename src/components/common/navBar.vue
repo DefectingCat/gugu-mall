@@ -26,6 +26,7 @@ export default defineComponent({
   line-height: 44px;
   width: 100%;
   align-items: center;
+  font-size: 15px;
   &__left,
   &__right {
     width: 15%;
