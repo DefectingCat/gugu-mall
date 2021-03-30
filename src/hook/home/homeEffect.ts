@@ -1,25 +1,35 @@
-import { reactive, toRefs } from 'vue';
+import { reactive } from 'vue';
 import request from '@/hook/network/request';
 // import { AxiosResponse } from 'axios';
 
-const state = reactive({
-  banners: [],
-  recommend: [],
-  currentSwTab: 0,
-});
+interface State {
+  banners: Record<string, unknown>[];
+  recommend: Record<string, unknown>[];
+}
 
-export async function homeRequestEffect(): Promise<void> {
-  // 首页的请求
-  const res = await request({
-    url: '/home/multidata',
+interface HomeData {
+  state: State;
+  reqSwiper: () => Promise<void>;
+}
+
+export function homeRequestEffect(): HomeData {
+  const state = reactive({
+    banners: [],
+    recommend: [],
   });
-  state.banners = res.data.banner.list;
-  state.recommend = res.data.recommend.list;
-}
 
-// SwitchTab emit 的点击
-export function swTabClick(i: number): void {
-  state.currentSwTab = i;
-}
+  // 首页的请求
+  const reqSwiper: () => Promise<void> = async () => {
+    const res = await request({
+      url: '/home/multidata',
+    });
+    state.banners = res.data.banner.list;
+    state.recommend = res.data.recommend.list;
+  };
 
-export const { banners, recommend, currentSwTab } = toRefs(state);
+  // const { banners, recommend } = toRefs(state);
+  return {
+    state,
+    reqSwiper,
+  };
+}

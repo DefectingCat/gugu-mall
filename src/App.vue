@@ -4,6 +4,16 @@
     <router-link to="/about">About</router-link>
   </div> -->
   <router-view />
+  <MainTabBar />
 </template>
+
+<script lang="ts">
+import MainTabBar from '@/components/common/MainTabBar.vue';
+export default {
+  components: {
+    MainTabBar,
+  },
+};
+</script>
 
 <style lang="scss"></style>

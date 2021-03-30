@@ -21,19 +21,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted } from 'vue';
+import { defineComponent, onMounted, ref, toRefs } from 'vue';
 // common components
 import navBar from '@/components/common/navBar.vue';
 // vant
 import { Swipe, SwipeItem } from 'vant';
 // network
-import {
-  banners,
-  recommend,
-  currentSwTab,
-  homeRequestEffect,
-  swTabClick,
-} from '@/hook/home/homeEffect';
+import { homeRequestEffect } from '@/hook/home/homeEffect';
 // child components
 import Recommend from './children/Recommend.vue';
 import WeekendRecommend from './children/WeekendRecommend.vue';
@@ -50,9 +44,16 @@ export default defineComponent({
     SwitchTab,
   },
   setup() {
+    const { state, reqSwiper } = homeRequestEffect();
     onMounted(() => {
-      homeRequestEffect();
+      reqSwiper();
     });
+    const currentSwTab = ref(0);
+    // SwitchTab emit 的点击
+    function swTabClick(i: number): void {
+      currentSwTab.value = i;
+    }
+    const { banners, recommend } = toRefs(state);
     return {
       banners,
       recommend,
