@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, toRefs } from 'vue';
+import { defineComponent, toRefs, watch } from 'vue';
 // vant
 import { List } from 'vant';
 import GoodsListItem from './GoodsListItem.vue';
@@ -49,6 +49,15 @@ export default defineComponent({
       // 它肯定会是字符串的（；´д｀）ゞ
       await reqGoods(props?.currentTab as string);
     };
+    // 没有滚动时第一次点击时手动加载
+    watch(
+      () => props?.currentTab,
+      () => {
+        if (!state.goods[props?.currentTab as string].list1.length) {
+          reqGoods(props?.currentTab as string);
+        }
+      }
+    );
     const { goods, loading, finished } = toRefs(state);
     return {
       onLoad,
