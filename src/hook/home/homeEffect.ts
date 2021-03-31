@@ -1,35 +1,24 @@
 import { reactive } from 'vue';
 import request from '@/hook/network/request';
 // import { AxiosResponse } from 'axios';
-
+interface GoodsData {
+  page: number;
+  list1: Record<string, unknown>[];
+  list2: Record<string, unknown>[];
+}
 interface State {
   banners: Record<string, unknown>[];
   recommend: Record<string, unknown>[];
   goods: {
-    pop: {
-      page: number;
-      list1: Record<string, unknown>[];
-      list2: Record<string, unknown>[];
-    };
-    new: {
-      page: number;
-      list1: Record<string, unknown>[];
-      list2: Record<string, unknown>[];
-    };
-    sell: {
-      page: number;
-      list1: Record<string, unknown>[];
-      list2: Record<string, unknown>[];
-    };
+    pop: GoodsData;
+    new: GoodsData;
+    sell: GoodsData;
     // 索引签名，通过定义接口用来对对象key的约束
-    [key: string]: {
-      page: number;
-      list1: Record<string, unknown>[];
-      list2: Record<string, unknown>[];
-    };
+    [key: string]: GoodsData;
   };
+  loading: boolean;
+  finished: boolean;
 }
-
 interface HomeData {
   state: State;
   reqSwiper: () => Promise<void>;
@@ -57,6 +46,8 @@ export function homeRequestEffect(): HomeData {
         list2: [],
       },
     },
+    loading: false,
+    finished: false,
   });
 
   // 首页的请求
@@ -81,9 +72,10 @@ export function homeRequestEffect(): HomeData {
     const paging = Math.floor(res.data.list.length / 2);
     const p1 = res.data.list.slice(0, paging);
     const p2 = res.data.list.slice(paging, res.data.list.length);
-    state.goods[type].list1 = [...p1];
-    state.goods[type].list2 = [...p2];
+    state.goods[type].list1.push(...p1);
+    state.goods[type].list2.push(...p2);
     state.goods[type].page = page;
+    state.loading = false;
   };
 
   // const { banners, recommend } = toRefs(state);

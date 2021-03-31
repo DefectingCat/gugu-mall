@@ -1,6 +1,6 @@
 <template>
   <div class="item" @click="goodsItemClick">
-    <img :src="item.show.img" alt="" />
+    <img :src="item.show.img" alt="" v-lazy="item.show.img" :preload="'66%'" />
     <div>
       <p>
         {{ item.title }}
@@ -23,15 +23,12 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
-interface GoodsItem {
-  // iid: string;
-  [key: string]: unknown;
-}
+
 export default defineComponent({
   name: 'GoodsListItem',
   props: {
     item: {
-      type: Object as () => GoodsItem,
+      type: Object,
     },
   },
   setup(props) {
@@ -49,6 +46,7 @@ export default defineComponent({
 <style scoped lang="scss">
 .item {
   font-size: 14px;
+  margin-top: 8px;
   img {
     width: 100%;
     border-radius: 8px;

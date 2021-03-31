@@ -5,7 +5,7 @@
     </template>
   </navBar>
 
-  <Swipe class="swiper" :autoplay="3000" indicator-color="white">
+  <Swipe class="swiper" :autoplay="3000" indicator-color="white" lazy-render>
     <SwipeItem v-for="item of banners" :key="item.acm">
       <img :src="item.image" alt="" />
     </SwipeItem>
@@ -18,12 +18,7 @@
     @swTabClick="swTabClick"
     :currentSwTab="currentSwTab"
   />
-  <GoodsList
-    :list1="goods[currentTab].list1"
-    :list2="goods[currentTab].list2"
-    :loading="loading"
-    :finished="finished"
-  />
+  <GoodsList :currentTab="currentTab" />
 </template>
 
 <script lang="ts">
@@ -52,36 +47,28 @@ export default defineComponent({
     SwitchTab,
   },
   setup() {
-    const { state, reqSwiper, reqGoods } = homeRequestEffect();
+    const { state, reqSwiper } = homeRequestEffect();
     onMounted(() => {
       reqSwiper();
-      reqGoods('pop');
     });
     const homeData = reactive({
       currentSwTab: 0,
       swTabs: ['pop', 'new', 'sell'],
       currentTab: 'pop',
-      loading: false,
-      finished: false,
     });
     // SwitchTab emit 的点击
     function swTabClick(i: number): void {
       homeData.currentSwTab = i;
       homeData.currentTab = homeData.swTabs[i];
     }
-    const { currentSwTab, swTabs, currentTab, loading, finished } = toRefs(
-      homeData
-    );
-    const { banners, recommend, goods } = toRefs(state);
+    const { currentSwTab, swTabs, currentTab } = toRefs(homeData);
+    const { banners, recommend } = toRefs(state);
     return {
       banners,
       recommend,
-      goods,
       currentSwTab,
       swTabs,
       currentTab,
-      loading,
-      finished,
       swTabClick,
     };
   },

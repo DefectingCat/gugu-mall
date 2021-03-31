@@ -6,7 +6,7 @@
       :key="'rec' + item.sort"
     >
       <a href="#">
-        <img :src="item.image" alt="" />
+        <img :src="item.image" alt="" v-lazy="item.image" />
         <div>
           {{ item.title }}
         </div>

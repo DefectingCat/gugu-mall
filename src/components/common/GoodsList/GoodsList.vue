@@ -1,35 +1,39 @@
 <template>
   <van-list
-    class="goods-list"
-    v-model:loading="isLoading"
+    v-model:loading="loading"
     :finished="finished"
     finished-text="没有更多了"
     @load="onLoad"
   >
-    <div class="goods-list__col">
-      <GoodsListItem
-        class="goods-list__col__item"
-        v-for="item of list1"
-        :key="item"
-        :item="item"
-      />
-    </div>
-    <div class="goods-list__col">
-      <GoodsListItem
-        class="goods-list__col__item"
-        v-for="item of list2"
-        :key="item"
-        :item="item"
-      />
+    <!-- 额外嵌套一个div，将van-list的placeholder挤下去，否则会影响上拉加载 -->
+    <div class="goods-list">
+      <div class="goods-list__col">
+        <GoodsListItem
+          class="goods-list__col__item"
+          v-for="item of goods[currentTab].list1"
+          :key="item"
+          :item="item"
+        />
+      </div>
+      <div class="goods-list__col">
+        <GoodsListItem
+          class="goods-list__col__item"
+          v-for="item of goods[currentTab].list2"
+          :key="item"
+          :item="item"
+        />
+      </div>
     </div>
   </van-list>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, toRefs } from 'vue';
 // vant
 import { List } from 'vant';
 import GoodsListItem from './GoodsListItem.vue';
+// network
+import { homeRequestEffect } from '@/hook/home/homeEffect';
 export default defineComponent({
   name: 'GoodsList',
   components: {
@@ -37,19 +41,20 @@ export default defineComponent({
     GoodsListItem,
   },
   props: {
-    list1: Array,
-    list2: Array,
-    loading: Boolean,
-    finished: Boolean,
+    currentTab: String,
   },
-  setup(props, { emit }) {
-    const isLoading = ref(props.loading);
-    const onLoad = () => {
-      emit('test');
+  setup(props) {
+    const { state, reqGoods } = homeRequestEffect();
+    const onLoad = async () => {
+      // 它肯定会是字符串的（；´д｀）ゞ
+      await reqGoods(props?.currentTab as string);
     };
+    const { goods, loading, finished } = toRefs(state);
     return {
       onLoad,
-      isLoading,
+      loading,
+      finished,
+      goods,
     };
   },
 });

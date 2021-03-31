@@ -41,6 +41,7 @@ export default defineComponent({
   top: 40px;
   z-index: 10;
   background: #fff;
+  padding-bottom: 4px;
   &__item {
     font-size: 14px;
     color: $content-fontColor;
