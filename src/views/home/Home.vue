@@ -1,7 +1,7 @@
 <template>
   <navBar class="home-nav">
     <template #center>
-      <p>咕咕街</p>
+      <span>咕咕街</span>
     </template>
   </navBar>
 
@@ -18,12 +18,19 @@
     @swTabClick="swTabClick"
     :currentSwTab="currentSwTab"
   />
+  <GoodsList
+    :list1="goods[currentTab].list1"
+    :list2="goods[currentTab].list2"
+    :loading="loading"
+    :finished="finished"
+  />
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, toRefs } from 'vue';
+import { defineComponent, onMounted, toRefs, reactive } from 'vue';
 // common components
 import navBar from '@/components/common/navBar.vue';
+import GoodsList from '@/components/common/GoodsList/GoodsList.vue';
 // vant
 import { Swipe, SwipeItem } from 'vant';
 // network
@@ -37,6 +44,7 @@ export default defineComponent({
   name: 'Home',
   components: {
     navBar,
+    GoodsList,
     Swipe,
     SwipeItem,
     Recommend,
@@ -44,20 +52,36 @@ export default defineComponent({
     SwitchTab,
   },
   setup() {
-    const { state, reqSwiper } = homeRequestEffect();
+    const { state, reqSwiper, reqGoods } = homeRequestEffect();
     onMounted(() => {
       reqSwiper();
+      reqGoods('pop');
     });
-    const currentSwTab = ref(0);
+    const homeData = reactive({
+      currentSwTab: 0,
+      swTabs: ['pop', 'new', 'sell'],
+      currentTab: 'pop',
+      loading: false,
+      finished: false,
+    });
     // SwitchTab emit 的点击
     function swTabClick(i: number): void {
-      currentSwTab.value = i;
+      homeData.currentSwTab = i;
+      homeData.currentTab = homeData.swTabs[i];
     }
-    const { banners, recommend } = toRefs(state);
+    const { currentSwTab, swTabs, currentTab, loading, finished } = toRefs(
+      homeData
+    );
+    const { banners, recommend, goods } = toRefs(state);
     return {
       banners,
       recommend,
+      goods,
       currentSwTab,
+      swTabs,
+      currentTab,
+      loading,
+      finished,
       swTabClick,
     };
   },

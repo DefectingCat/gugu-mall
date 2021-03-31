@@ -37,6 +37,10 @@ export default defineComponent({
   justify-content: space-around;
   height: 32px;
   line-height: 32px;
+  position: sticky;
+  top: 40px;
+  z-index: 10;
+  background: #fff;
   &__item {
     font-size: 14px;
     color: $content-fontColor;

@@ -5,7 +5,7 @@
       v-for="item of recommends"
       :key="'rec' + item.sort"
     >
-      <a href="">
+      <a href="#">
         <img :src="item.image" alt="" />
         <div>
           {{ item.title }}

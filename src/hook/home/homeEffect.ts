@@ -5,21 +5,62 @@ import request from '@/hook/network/request';
 interface State {
   banners: Record<string, unknown>[];
   recommend: Record<string, unknown>[];
+  goods: {
+    pop: {
+      page: number;
+      list1: Record<string, unknown>[];
+      list2: Record<string, unknown>[];
+    };
+    new: {
+      page: number;
+      list1: Record<string, unknown>[];
+      list2: Record<string, unknown>[];
+    };
+    sell: {
+      page: number;
+      list1: Record<string, unknown>[];
+      list2: Record<string, unknown>[];
+    };
+    // 索引签名，通过定义接口用来对对象key的约束
+    [key: string]: {
+      page: number;
+      list1: Record<string, unknown>[];
+      list2: Record<string, unknown>[];
+    };
+  };
 }
 
 interface HomeData {
   state: State;
   reqSwiper: () => Promise<void>;
+  reqGoods: (type: string) => Promise<void>;
 }
 
 export function homeRequestEffect(): HomeData {
-  const state = reactive({
+  const state: State = reactive({
     banners: [],
     recommend: [],
+    goods: {
+      pop: {
+        page: 0,
+        list1: [],
+        list2: [],
+      },
+      new: {
+        page: 0,
+        list1: [],
+        list2: [],
+      },
+      sell: {
+        page: 0,
+        list1: [],
+        list2: [],
+      },
+    },
   });
 
   // 首页的请求
-  const reqSwiper: () => Promise<void> = async () => {
+  const reqSwiper = async (): Promise<void> => {
     const res = await request({
       url: '/home/multidata',
     });
@@ -27,9 +68,28 @@ export function homeRequestEffect(): HomeData {
     state.recommend = res.data.recommend.list;
   };
 
+  // 商品的请求
+  const reqGoods = async (type: string): Promise<void> => {
+    const page = state.goods[type].page + 1;
+    const res = await request({
+      url: '/home/data',
+      params: {
+        type,
+        page,
+      },
+    });
+    const paging = Math.floor(res.data.list.length / 2);
+    const p1 = res.data.list.slice(0, paging);
+    const p2 = res.data.list.slice(paging, res.data.list.length);
+    state.goods[type].list1 = [...p1];
+    state.goods[type].list2 = [...p2];
+    state.goods[type].page = page;
+  };
+
   // const { banners, recommend } = toRefs(state);
   return {
     state,
     reqSwiper,
+    reqGoods,
   };
 }
