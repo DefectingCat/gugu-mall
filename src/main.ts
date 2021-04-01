@@ -11,6 +11,7 @@ import '@/assets/css/index.scss';
 createApp(App)
   .use(Lazyload, {
     lazyComponent: true,
+    preload: 1.49,
   })
   .use(store)
   .use(router)

@@ -18,18 +18,23 @@
     @swTabClick="swTabClick"
     :currentSwTab="currentSwTab"
   />
-  <GoodsList :currentTab="currentTab" />
+  <!-- 动态组件，实现商品数据缓存 -->
+  <keep-alive>
+    <component :is="currentTabComponent"></component>
+  </keep-alive>
 </template>
 
 <script lang="ts">
 import { defineComponent, onMounted, toRefs, reactive } from 'vue';
 // common components
 import navBar from '@/components/common/navBar.vue';
-import GoodsList from '@/components/common/GoodsList/GoodsList.vue';
+import GoodsListPOP from '@/components/common/GoodsList/GoodsListPOP.vue';
+import GoodsListNEW from '@/components/common/GoodsList/GoodsListNEW.vue';
+import GoodsListSELL from '@/components/common/GoodsList/GoodsListSELL.vue';
 // vant
 import { Swipe, SwipeItem } from 'vant';
 // network
-import { homeRequestEffect } from '@/hook/home/homeEffect';
+import { state, homeRequestEffect } from '@/hook/home/homeEffect';
 // child components
 import Recommend from './children/Recommend.vue';
 import WeekendRecommend from './children/WeekendRecommend.vue';
@@ -39,7 +44,9 @@ export default defineComponent({
   name: 'Home',
   components: {
     navBar,
-    GoodsList,
+    GoodsListPOP,
+    GoodsListNEW,
+    GoodsListSELL,
     Swipe,
     SwipeItem,
     Recommend,
@@ -47,7 +54,7 @@ export default defineComponent({
     SwitchTab,
   },
   setup() {
-    const { state, reqSwiper } = homeRequestEffect();
+    const { reqSwiper } = homeRequestEffect();
     onMounted(() => {
       reqSwiper();
     });
@@ -55,13 +62,19 @@ export default defineComponent({
       currentSwTab: 0,
       swTabs: ['pop', 'new', 'sell'],
       currentTab: 'pop',
+      currentTabComponent: 'GoodsListPOP',
     });
     // SwitchTab emit 的点击
     function swTabClick(i: number): void {
       homeData.currentSwTab = i;
       homeData.currentTab = homeData.swTabs[i];
+      homeData.currentTabComponent = `GoodsList${homeData.swTabs[
+        i
+      ].toUpperCase()}`;
     }
-    const { currentSwTab, swTabs, currentTab } = toRefs(homeData);
+    const { currentSwTab, swTabs, currentTab, currentTabComponent } = toRefs(
+      homeData
+    );
     const { banners, recommend } = toRefs(state);
     return {
       banners,
@@ -69,6 +82,7 @@ export default defineComponent({
       currentSwTab,
       swTabs,
       currentTab,
+      currentTabComponent,
       swTabClick,
     };
   },

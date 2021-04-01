@@ -1,6 +1,6 @@
-import { reactive } from 'vue';
+import { reactive, toRefs, Ref } from 'vue';
 import request from '@/hook/network/request';
-// import { AxiosResponse } from 'axios';
+
 interface GoodsData {
   page: number;
   list1: Record<string, unknown>[];
@@ -16,36 +16,44 @@ interface State {
     // 索引签名，通过定义接口用来对对象key的约束
     [key: string]: GoodsData;
   };
-  loading: boolean;
-  finished: boolean;
 }
 interface HomeData {
-  state: State;
+  loading: Ref<boolean>;
+  finished: Ref<boolean>;
   reqSwiper: () => Promise<void>;
   reqGoods: (type: string) => Promise<void>;
 }
+interface ListData {
+  loading: boolean;
+  finished: boolean;
+}
+
+// 这里将商品的数据都集中放在这里让子组件`GoodsList`单独管理
+// 配合动态组件即可实现商品数据的缓存
+export const state: State = reactive({
+  banners: [],
+  recommend: [],
+  goods: {
+    pop: {
+      page: 0,
+      list1: [],
+      list2: [],
+    },
+    new: {
+      page: 0,
+      list1: [],
+      list2: [],
+    },
+    sell: {
+      page: 0,
+      list1: [],
+      list2: [],
+    },
+  },
+});
 
 export function homeRequestEffect(): HomeData {
-  const state: State = reactive({
-    banners: [],
-    recommend: [],
-    goods: {
-      pop: {
-        page: 0,
-        list1: [],
-        list2: [],
-      },
-      new: {
-        page: 0,
-        list1: [],
-        list2: [],
-      },
-      sell: {
-        page: 0,
-        list1: [],
-        list2: [],
-      },
-    },
+  const listData: ListData = reactive({
     loading: false,
     finished: false,
   });
@@ -75,12 +83,13 @@ export function homeRequestEffect(): HomeData {
     state.goods[type].list1.push(...p1);
     state.goods[type].list2.push(...p2);
     state.goods[type].page = page;
-    state.loading = false;
+    listData.loading = false;
   };
 
-  // const { banners, recommend } = toRefs(state);
+  const { loading, finished } = toRefs(listData);
   return {
-    state,
+    loading,
+    finished,
     reqSwiper,
     reqGoods,
   };

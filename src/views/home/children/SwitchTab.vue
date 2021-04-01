@@ -4,8 +4,8 @@
       class="sw-tab__item"
       v-for="(item, index) of titles"
       :key="item"
-      @click="itemClick(index)"
       :class="{ 'sw-tab__item--active': index == currentSwTab }"
+      @click="itemClick(index)"
     >
       {{ item }}
     </li>

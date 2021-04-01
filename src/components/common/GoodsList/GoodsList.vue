@@ -28,12 +28,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, toRefs, watch } from 'vue';
+import { defineComponent, toRefs } from 'vue';
 // vant
 import { List } from 'vant';
 import GoodsListItem from './GoodsListItem.vue';
 // network
-import { homeRequestEffect } from '@/hook/home/homeEffect';
+import { state, homeRequestEffect } from '@/hook/home/homeEffect';
+
 export default defineComponent({
   name: 'GoodsList',
   components: {
@@ -44,25 +45,20 @@ export default defineComponent({
     currentTab: String,
   },
   setup(props) {
-    const { state, reqGoods } = homeRequestEffect();
+    const { loading, finished, reqGoods } = homeRequestEffect();
+    reqGoods('new');
+    reqGoods('sell');
     const onLoad = async () => {
       // 它肯定会是字符串的（；´д｀）ゞ
-      await reqGoods(props?.currentTab as string);
-    };
-    // 没有滚动时第一次点击时手动加载
-    watch(
-      () => props?.currentTab,
-      () => {
-        if (!state.goods[props?.currentTab as string].list1.length) {
-          reqGoods(props?.currentTab as string);
-        }
+      if (props.currentTab) {
+        await reqGoods(props.currentTab);
       }
-    );
-    const { goods, loading, finished } = toRefs(state);
+    };
+    const { goods } = toRefs(state);
     return {
-      onLoad,
       loading,
       finished,
+      onLoad,
       goods,
     };
   },
