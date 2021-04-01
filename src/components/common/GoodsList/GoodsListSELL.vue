@@ -10,9 +10,6 @@ export default defineComponent({
   components: {
     GoodsList,
   },
-  setup() {
-    console.log('sell');
-  },
 });
 </script>
 

@@ -22,6 +22,7 @@
   <keep-alive>
     <component :is="currentTabComponent"></component>
   </keep-alive>
+  <GoTop class="go-top" />
 </template>
 
 <script lang="ts">
@@ -31,6 +32,7 @@ import navBar from '@/components/common/navBar.vue';
 import GoodsListPOP from '@/components/common/GoodsList/GoodsListPOP.vue';
 import GoodsListNEW from '@/components/common/GoodsList/GoodsListNEW.vue';
 import GoodsListSELL from '@/components/common/GoodsList/GoodsListSELL.vue';
+import GoTop from '@/components/common/GoTop.vue';
 // vant
 import { Swipe, SwipeItem } from 'vant';
 // network
@@ -47,6 +49,7 @@ export default defineComponent({
     GoodsListPOP,
     GoodsListNEW,
     GoodsListSELL,
+    GoTop,
     Swipe,
     SwipeItem,
     Recommend,
@@ -100,5 +103,11 @@ export default defineComponent({
   img {
     width: 375px;
   }
+}
+.go-top {
+  position: fixed;
+  right: 10px;
+  bottom: 80px;
+  z-index: 11;
 }
 </style>
