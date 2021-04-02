@@ -17,15 +17,15 @@ interface State {
     [key: string]: GoodsData;
   };
 }
+interface ListData {
+  loading: boolean;
+  finished: boolean;
+}
 interface HomeData {
   loading: Ref<boolean>;
   finished: Ref<boolean>;
   reqSwiper: () => Promise<void>;
   reqGoods: (type: string) => Promise<void>;
-}
-interface ListData {
-  loading: boolean;
-  finished: boolean;
 }
 
 // 这里将商品的数据都集中放在这里让子组件`GoodsList`单独管理
@@ -52,6 +52,13 @@ export const state: State = reactive({
   },
 });
 
+/**
+ * 首页轮播图以及商品列表数据请求
+ *
+ * @param {string} type reqGoods 接受一个类型的参数，
+ * 请求不同的商品信息
+ * @return {Object} 接口HomeData
+ */
 export function homeRequestEffect(): HomeData {
   const listData: ListData = reactive({
     loading: false,
