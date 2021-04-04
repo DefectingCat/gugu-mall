@@ -58,15 +58,16 @@ export default defineComponent({
   },
   setup() {
     const { reqSwiper } = homeRequestEffect();
-    onMounted(() => {
-      reqSwiper();
-    });
     const homeData = reactive({
       currentSwTab: 0,
       swTabs: ['pop', 'new', 'sell'],
       currentTab: 'pop',
       currentTabComponent: 'GoodsListPOP',
     });
+    onMounted(() => {
+      reqSwiper();
+    });
+
     // SwitchTab emit 的点击
     function swTabClick(i: number): void {
       homeData.currentSwTab = i;
@@ -75,6 +76,7 @@ export default defineComponent({
         i
       ].toUpperCase()}`;
     }
+
     const { currentSwTab, swTabs, currentTab, currentTabComponent } = toRefs(
       homeData
     );
@@ -106,7 +108,6 @@ export default defineComponent({
 }
 .go-top {
   position: fixed;
-  right: 10px;
   bottom: 80px;
   z-index: 11;
 }

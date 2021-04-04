@@ -35,7 +35,7 @@ export const state: State = reactive({
   recommend: [],
   goods: {
     pop: {
-      page: 0,
+      page: 47,
       list1: [],
       list2: [],
     },
@@ -77,20 +77,24 @@ export function homeRequestEffect(): HomeData {
   // 商品的请求
   const reqGoods = async (type: string): Promise<void> => {
     const page = state.goods[type].page + 1;
-    const res = await request({
-      url: '/home/data',
-      params: {
-        type,
-        page,
-      },
-    });
-    const paging = Math.floor(res.data.list.length / 2);
-    const p1 = res.data.list.slice(0, paging);
-    const p2 = res.data.list.slice(paging, res.data.list.length);
-    state.goods[type].list1.push(...p1);
-    state.goods[type].list2.push(...p2);
-    state.goods[type].page = page;
-    listData.loading = false;
+    try {
+      const res = await request({
+        url: '/home/data',
+        params: {
+          type,
+          page,
+        },
+      });
+      const paging = Math.floor(res.data.list.length / 2);
+      const p1 = res.data.list.slice(0, paging);
+      const p2 = res.data.list.slice(paging, res.data.list.length);
+      state.goods[type].list1.push(...p1);
+      state.goods[type].list2.push(...p2);
+      state.goods[type].page = page;
+      listData.loading = false;
+    } catch {
+      listData.finished = true;
+    }
   };
 
   const { loading, finished } = toRefs(listData);

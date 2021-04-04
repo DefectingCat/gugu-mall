@@ -2,8 +2,9 @@
   <van-list
     v-model:loading="loading"
     :finished="finished"
-    finished-text="没有更多了"
+    finished-text="到底啦＞﹏＜"
     @load="onLoad"
+    class="van-list"
   >
     <!-- 额外嵌套一个div，将van-list的placeholder挤下去，否则会影响上拉加载 -->
     <div class="goods-list">
@@ -66,11 +67,13 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
+.van-list {
+  margin-bottom: 66px;
+}
 .goods-list {
   display: flex;
   flex-flow: row wrap;
   justify-content: space-evenly;
-  margin-bottom: 60px;
   &__col {
     width: 45%;
   }

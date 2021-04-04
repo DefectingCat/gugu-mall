@@ -69,6 +69,7 @@ export default defineComponent({
   flex-flow: row;
   justify-content: space-around;
   align-items: center;
+  z-index: 12;
 }
 .base-item {
   display: flex;
