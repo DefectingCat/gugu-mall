@@ -17,6 +17,7 @@
     :titles="['流行', '新款', '精选']"
     @swTabClick="swTabClick"
     :currentSwTab="currentSwTab"
+    ref="swTab"
   />
   <!-- 动态组件，实现商品数据缓存 -->
   <keep-alive>
@@ -26,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, toRefs, reactive } from 'vue';
+import { defineComponent, onMounted, toRefs, reactive, ref } from 'vue';
 // common components
 import navBar from '@/components/common/navBar.vue';
 import GoodsListPOP from '@/components/common/GoodsList/GoodsListPOP.vue';
@@ -64,10 +65,10 @@ export default defineComponent({
       currentTab: 'pop',
       currentTabComponent: 'GoodsListPOP',
     });
+    const swTab = ref();
     onMounted(() => {
       reqSwiper();
     });
-
     // SwitchTab emit 的点击
     function swTabClick(i: number): void {
       homeData.currentSwTab = i;
@@ -89,6 +90,7 @@ export default defineComponent({
       currentTab,
       currentTabComponent,
       swTabClick,
+      swTab,
     };
   },
 });

@@ -1,6 +1,6 @@
 <template>
   <div class="nav-bar">
-    <div class="nav-bar__left">
+    <div class="nav-bar__left" @click="leftClick">
       <slot name="left"></slot>
     </div>
     <div class="nav-bar__center">
@@ -14,8 +14,18 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { useRouter } from 'vue-router';
 export default defineComponent({
   name: 'navBar',
+  setup() {
+    const router = useRouter();
+    const leftClick = () => {
+      router.go(-1);
+    };
+    return {
+      leftClick,
+    };
+  },
 });
 </script>
 

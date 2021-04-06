@@ -34,7 +34,7 @@ export default defineComponent({
   setup(props) {
     const router = useRouter();
     const goodsItemClick = (): void => {
-      router.push('/detil' + props.item?.iid);
+      router.push('/detail/' + props.item?.iid);
     };
     return {
       goodsItemClick,

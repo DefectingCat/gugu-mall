@@ -1,75 +1,42 @@
 <template>
-  <van-list
-    v-model:loading="loading"
-    :finished="finished"
-    finished-text="到底啦＞﹏＜"
-    @load="onLoad"
-    class="van-list"
-  >
-    <!-- 额外嵌套一个div，将van-list的placeholder挤下去，否则会影响上拉加载 -->
-    <div class="goods-list">
-      <div class="goods-list__col">
-        <GoodsListItem
-          class="goods-list__col__item"
-          v-for="item of goods[currentTab].list1"
-          :key="item"
-          :item="item"
-        />
-      </div>
-      <div class="goods-list__col">
-        <GoodsListItem
-          class="goods-list__col__item"
-          v-for="item of goods[currentTab].list2"
-          :key="item"
-          :item="item"
-        />
-      </div>
+  <!-- 额外嵌套一个div，将van-list的placeholder挤下去，否则会影响上拉加载 -->
+  <div class="goods-list">
+    <div class="goods-list__col">
+      <GoodsListItem
+        class="goods-list__col__item"
+        v-for="item of goods[currentTab].list1"
+        :key="item"
+        :item="item"
+      />
     </div>
-  </van-list>
+    <div class="goods-list__col">
+      <GoodsListItem
+        class="goods-list__col__item"
+        v-for="item of goods[currentTab].list2"
+        :key="item"
+        :item="item"
+      />
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, toRefs } from 'vue';
-// vant
-import { List } from 'vant';
+import { defineComponent } from 'vue';
 import GoodsListItem from './GoodsListItem.vue';
-// network
-import { state, homeRequestEffect } from '@/hook/home/homeEffect';
 
 export default defineComponent({
   name: 'GoodsList',
   components: {
-    'van-list': List,
     GoodsListItem,
   },
   props: {
     currentTab: String,
-  },
-  setup(props) {
-    const { loading, finished, reqGoods } = homeRequestEffect();
-    reqGoods('new');
-    reqGoods('sell');
-    const onLoad = async () => {
-      // 它肯定会是字符串的（；´д｀）ゞ
-      if (props.currentTab) {
-        await reqGoods(props.currentTab);
-      }
-    };
-    const { goods } = toRefs(state);
-    return {
-      loading,
-      finished,
-      onLoad,
-      goods,
-    };
+    goods: Object,
   },
 });
 </script>
 
 <style scoped lang="scss">
-.van-list {
-  margin-bottom: 66px;
-}
 .goods-list {
   display: flex;
   flex-flow: row wrap;
@@ -77,9 +44,9 @@ export default defineComponent({
   &__col {
     width: 45%;
   }
-}
-// 穿透到子组件
-::v-deep .van-list__loading {
-  width: 100%;
+  // 穿透到子组件
+  & :deep(.van-list__loading) {
+    width: 100%;
+  }
 }
 </style>

@@ -28,7 +28,6 @@ interface HomeData {
   reqGoods: (type: string) => Promise<void>;
 }
 
-// 这里将商品的数据都集中放在这里让子组件`GoodsList`单独管理
 // 配合动态组件即可实现商品数据的缓存
 export const state: State = reactive({
   banners: [],
