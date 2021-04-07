@@ -1,5 +1,5 @@
 <template>
-  <div class="tab-bar">
+  <div class="tab-bar" v-show="showBar">
     <div
       class="base-item"
       @click="itemClick(item.path)"
@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue';
+import { computed, defineComponent, reactive, toRefs } from 'vue';
 import { RouteLocationRaw, useRoute, useRouter } from 'vue-router';
 export default defineComponent({
   name: 'MainTabBar',
@@ -39,15 +39,25 @@ export default defineComponent({
     const itemClick = (routePath: string) => {
       if (route.path != routePath) {
         state.routePath = routePath;
-        // 我非常明确的知道这是一个路由地址
+        // 这绝对是一个路由地址ρ(*╯^╰)
         router.push(routePath as RouteLocationRaw);
       }
     };
+    // 进入 /detail 页面不显示
+    const showBar = computed(() => {
+      const pathArr = route.path.split('/');
+      if (pathArr[1] === 'detail') {
+        return false;
+      }
+      return true;
+    });
+
     const { info, routePath } = toRefs(state);
     return {
       info,
       routePath,
       itemClick,
+      showBar,
     };
   },
 });

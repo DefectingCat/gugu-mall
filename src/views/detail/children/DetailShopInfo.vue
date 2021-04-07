@@ -35,6 +35,9 @@
         </ul>
       </div>
     </div>
+    <div class="shop-info__btn">
+      <span>进店逛逛</span>
+    </div>
   </div>
 </template>
 
@@ -130,6 +133,20 @@ export default defineComponent({
           color: #f13e3a;
         }
       }
+    }
+  }
+  &__btn {
+    margin-top: 10px;
+    text-align: center;
+    span {
+      display: inline-block;
+      font-size: 14px;
+      background-color: #f2f5f8;
+      width: 150px;
+      height: 30px;
+      text-align: center;
+      line-height: 30px;
+      border-radius: 10px;
     }
   }
 }

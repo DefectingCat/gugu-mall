@@ -6,8 +6,13 @@
       </svg>
     </template>
     <template #center>
-      <ul class="detail-nav__title">
-        <li v-for="item of titles" :key="item">
+      <ul class="detail-nav__title" @click="titleClick">
+        <li
+          :class="{ 'detail-nav__title--active': currentTitle == index }"
+          v-for="(item, index) of titles"
+          :key="item"
+          :data-xfy-index="index"
+        >
           {{ item }}
         </li>
       </ul>
@@ -22,11 +27,12 @@
 
   <DetailBaseInfo :goods="goods" />
   <DetailShopInfo :shop="shop" />
+  <DetailGoodsInfo :detailInfo="detailInfo" />
   <div>this is detail</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, toRefs } from 'vue';
+import { defineComponent, reactive, toRefs } from 'vue';
 import { useRoute } from 'vue-router';
 // network
 import { state, detailReq } from '@/hook/detail/detailEffect';
@@ -37,6 +43,7 @@ import { Swipe, SwipeItem } from 'vant';
 // child components
 import DetailBaseInfo from './children/DetailBaseInfo.vue';
 import DetailShopInfo from './children/DetailShopInfo.vue';
+import DetailGoodsInfo from './children/DetailGoodsInfo.vue';
 
 export default defineComponent({
   name: 'Detail',
@@ -46,17 +53,38 @@ export default defineComponent({
     SwipeItem,
     DetailBaseInfo,
     DetailShopInfo,
+    DetailGoodsInfo,
   },
   setup() {
     const route = useRoute();
+    const detailData = reactive({
+      currentTitle: 0,
+    });
     const { reqDetail } = detailReq();
     reqDetail(route.params.iid as string);
-    const { titles, topImages, goods, shop } = toRefs(state);
+
+    // https://www.designcise.com/web/tutorial/how-to-fix-property-does-not-exist-on-type-eventtarget-typescript-error
+    const titleClick = (e: MouseEvent & { target: Element }) => {
+      const target = e.target;
+      if (target.nodeName.toLowerCase() === 'li') {
+        detailData.currentTitle = (target.getAttribute(
+          'data-xfy-index'
+          // If this was intentional, convert the expression to 'unknown' first.
+          // convertScript 双重无敌断言
+        ) as unknown) as number;
+      }
+    };
+
+    const { titles, topImages, goods, shop, detailInfo } = toRefs(state);
+    const { currentTitle } = toRefs(detailData);
     return {
       titles,
       topImages,
       goods,
       shop,
+      detailInfo,
+      titleClick,
+      currentTitle,
     };
   },
 });
@@ -78,6 +106,9 @@ export default defineComponent({
     justify-content: space-evenly;
     align-items: center;
     font-size: 14px;
+    &--active {
+      color: $base-color;
+    }
   }
 }
 .swiper {

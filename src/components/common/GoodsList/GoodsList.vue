@@ -45,7 +45,7 @@ export default defineComponent({
     width: 45%;
   }
   // 穿透到子组件
-  & :deep(.van-list__loading) {
+  :deep(.van-list__loading) {
     width: 100%;
   }
 }

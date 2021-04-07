@@ -11,12 +11,14 @@ interface ReqData {
     services: Record<string, unknown>[];
     [key: string]: unknown;
   };
+  detailInfo: unknown;
 }
 interface State {
   titles: string[];
   topImages: string[];
   goods: unknown;
   shop: unknown;
+  detailInfo: unknown;
 }
 interface DetailData {
   reqDetail: (iid: string) => Promise<void>;
@@ -72,6 +74,7 @@ export const state: State = reactive({
   topImages: [],
   goods: {},
   shop: {},
+  detailInfo: {},
 });
 
 export function detailReq(): DetailData {
@@ -95,6 +98,8 @@ export function detailReq(): DetailData {
     );
     // 店铺信息
     state.shop = new Shop(data.shopInfo);
+    // goods desciption
+    state.detailInfo = data.detailInfo;
   };
   return {
     reqDetail,
