@@ -12,6 +12,18 @@ interface ReqData {
     [key: string]: unknown;
   };
   detailInfo: unknown;
+  itemParams: {
+    info: {
+      images: string[];
+      set: [];
+    };
+    rule: {
+      tables: [][];
+    };
+  };
+  rate: {
+    list: Record<string, unknown>[];
+  };
 }
 interface State {
   titles: string[];
@@ -19,9 +31,22 @@ interface State {
   goods: unknown;
   shop: unknown;
   detailInfo: unknown;
+  paramInfo: {
+    image: string;
+    infos: [];
+    sizes: [][];
+  };
+  commentInfo: Record<string, unknown>;
+  recommend: {
+    goods: {
+      list1: [];
+      list2: [];
+    };
+  };
 }
 interface DetailData {
   reqDetail: (iid: string) => Promise<void>;
+  reqRecommend: () => Promise<void>;
 }
 
 class Goods {
@@ -69,12 +94,39 @@ class Shop {
   }
 }
 
+class GoodsParam {
+  image: string;
+  infos: [];
+  sizes: [][];
+  constructor(
+    info: ReqData['itemParams']['info'],
+    rule: ReqData['itemParams']['rule']
+  ) {
+    // 注: images可能没有值(某些商品有值, 某些没有值)
+    this.image = info.images ? info.images[0] : '';
+    this.infos = info.set;
+    this.sizes = rule.tables;
+  }
+}
+
 export const state: State = reactive({
   titles: ['商品', '参数', '评论', '推荐'],
   topImages: [],
   goods: {},
   shop: {},
   detailInfo: {},
+  paramInfo: {
+    image: '',
+    infos: [],
+    sizes: [],
+  },
+  commentInfo: {},
+  recommend: {
+    goods: {
+      list1: [],
+      list2: [],
+    },
+  },
 });
 
 export function detailReq(): DetailData {
@@ -100,8 +152,28 @@ export function detailReq(): DetailData {
     state.shop = new Shop(data.shopInfo);
     // goods desciption
     state.detailInfo = data.detailInfo;
+    // 商品参数信息
+    state.paramInfo = new GoodsParam(
+      data.itemParams.info,
+      data.itemParams.rule
+    );
+    // 用户评论信息
+    data.rate ? (state.commentInfo = data.rate.list[0]) : void 0;
   };
+
+  const reqRecommend = async () => {
+    const res = await request({
+      url: '/recommend',
+    });
+    const paging = Math.floor(res.data.list.length / 2);
+    const p1: [] = res.data.list.slice(0, paging);
+    const p2: [] = res.data.list.slice(paging, res.data.list.length);
+    state.recommend.goods.list1.push(...p1);
+    state.recommend.goods.list2.push(...p2);
+  };
+
   return {
     reqDetail,
+    reqRecommend,
   };
 }

@@ -7,12 +7,7 @@
     class="van-list"
     :immediate-check="false"
   >
-    <GoodsList
-      currentTab="pop"
-      :loading="loading"
-      :finished="finished"
-      :goods="goods"
-    />
+    <GoodsList currentTab="pop" :goods="goods" />
   </van-list>
 </template>
 

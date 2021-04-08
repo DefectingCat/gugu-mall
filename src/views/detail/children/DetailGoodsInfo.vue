@@ -7,12 +7,12 @@
     </div>
     <div class="goods-info__list">
       <span>{{ detailInfo.detailImage[0].key }}</span>
-      <img
+      <van-image
         v-for="item in detailInfo.detailImage[0].list"
         :src="item"
         alt=""
         :key="item"
-        v-lazy="item"
+        lazy-load
       />
     </div>
   </div>
@@ -20,8 +20,13 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+// vant
+import { Image } from 'vant';
 export default defineComponent({
   name: 'DetailGoodsInfo',
+  components: {
+    'van-image': Image,
+  },
   props: {
     detailInfo: Object,
   },
@@ -83,8 +88,8 @@ export default defineComponent({
     font-size: 15px;
     margin-bottom: 16px;
   }
-  img {
-    width: 100%;
+  :deep(.van-image) {
+    width: 375px;
   }
 }
 </style>

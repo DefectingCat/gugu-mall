@@ -6,12 +6,7 @@
     @load="onLoad"
     class="van-list"
   >
-    <GoodsList
-      currentTab="sell"
-      :loading="loading"
-      :finished="finished"
-      :goods="goods"
-    />
+    <GoodsList currentTab="sell" :goods="goods" />
   </van-list>
 </template>
 

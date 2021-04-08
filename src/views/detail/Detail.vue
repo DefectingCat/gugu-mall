@@ -28,6 +28,9 @@
   <DetailBaseInfo :goods="goods" />
   <DetailShopInfo :shop="shop" />
   <DetailGoodsInfo :detailInfo="detailInfo" />
+  <DetailParams :paramInfo="paramInfo" />
+  <DetailComment :commentInfo="commentInfo" />
+  <DetailRecommend :recommend="recommend" />
   <div>this is detail</div>
 </template>
 
@@ -44,6 +47,9 @@ import { Swipe, SwipeItem } from 'vant';
 import DetailBaseInfo from './children/DetailBaseInfo.vue';
 import DetailShopInfo from './children/DetailShopInfo.vue';
 import DetailGoodsInfo from './children/DetailGoodsInfo.vue';
+import DetailParams from './children/DetailParams.vue';
+import DetailComment from './children/DetailComment.vue';
+import DetailRecommend from './children/DetailRecommend.vue';
 
 export default defineComponent({
   name: 'Detail',
@@ -54,14 +60,18 @@ export default defineComponent({
     DetailBaseInfo,
     DetailShopInfo,
     DetailGoodsInfo,
+    DetailParams,
+    DetailComment,
+    DetailRecommend,
   },
   setup() {
     const route = useRoute();
     const detailData = reactive({
       currentTitle: 0,
     });
-    const { reqDetail } = detailReq();
+    const { reqDetail, reqRecommend } = detailReq();
     reqDetail(route.params.iid as string);
+    reqRecommend();
 
     // https://www.designcise.com/web/tutorial/how-to-fix-property-does-not-exist-on-type-eventtarget-typescript-error
     const titleClick = (e: MouseEvent & { target: Element }) => {
@@ -75,7 +85,17 @@ export default defineComponent({
       }
     };
 
-    const { titles, topImages, goods, shop, detailInfo } = toRefs(state);
+    const {
+      titles,
+      topImages,
+      goods,
+      shop,
+      detailInfo,
+      paramInfo,
+      commentInfo,
+      recommend,
+    } = toRefs(state);
+
     const { currentTitle } = toRefs(detailData);
     return {
       titles,
@@ -83,6 +103,9 @@ export default defineComponent({
       goods,
       shop,
       detailInfo,
+      paramInfo,
+      commentInfo,
+      recommend,
       titleClick,
       currentTitle,
     };
