@@ -12,7 +12,7 @@
         :src="item"
         alt=""
         :key="item"
-        lazy-load
+        @load="imgLoad"
       />
     </div>
   </div>
@@ -20,6 +20,8 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+// util
+import { debounce } from '@/hook/common/util';
 // vant
 import { Image } from 'vant';
 export default defineComponent({
@@ -29,6 +31,15 @@ export default defineComponent({
   },
   props: {
     detailInfo: Object,
+  },
+  setup(props, { emit }) {
+    const imgLoaded = () => {
+      emit('goodsImgLoad');
+    };
+    const imgLoad = debounce(imgLoaded, 100);
+    return {
+      imgLoad,
+    };
   },
 });
 </script>

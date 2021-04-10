@@ -27,18 +27,20 @@
 
   <DetailBaseInfo :goods="goods" />
   <DetailShopInfo :shop="shop" />
-  <DetailGoodsInfo :detailInfo="detailInfo" />
-  <DetailParams :paramInfo="paramInfo" />
-  <DetailComment :commentInfo="commentInfo" />
-  <DetailRecommend :recommend="recommend" />
-  <div>this is detail</div>
+  <DetailGoodsInfo :detailInfo="detailInfo" @goodsImgLoad="goodsImgLoad" />
+  <DetailParams ref="params" :paramInfo="paramInfo" />
+  <DetailComment ref="comment" :commentInfo="commentInfo" />
+  <DetailRecommend ref="recommendRef" :recommend="recommend" />
+  <DetailActionBar />
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue';
+import { defineComponent, toRefs } from 'vue';
 import { useRoute } from 'vue-router';
 // network
 import { state, detailReq } from '@/hook/detail/detailEffect';
+import { detailData, imgEffect } from '@/hook/detail/detailImgEffect';
+
 // common components
 import navBar from '@/components/common/navBar.vue';
 // vant
@@ -50,6 +52,7 @@ import DetailGoodsInfo from './children/DetailGoodsInfo.vue';
 import DetailParams from './children/DetailParams.vue';
 import DetailComment from './children/DetailComment.vue';
 import DetailRecommend from './children/DetailRecommend.vue';
+import DetailActionBar from './children/DetailActionBar.vue';
 
 export default defineComponent({
   name: 'Detail',
@@ -63,26 +66,18 @@ export default defineComponent({
     DetailParams,
     DetailComment,
     DetailRecommend,
+    DetailActionBar,
   },
   setup() {
     const route = useRoute();
-    const detailData = reactive({
-      currentTitle: 0,
-    });
+
     const { reqDetail, reqRecommend } = detailReq();
     reqDetail(route.params.iid as string);
     reqRecommend();
+    const { titleClick, params, comment, recommendRef, recoredY } = imgEffect();
 
-    // https://www.designcise.com/web/tutorial/how-to-fix-property-does-not-exist-on-type-eventtarget-typescript-error
-    const titleClick = (e: MouseEvent & { target: Element }) => {
-      const target = e.target;
-      if (target.nodeName.toLowerCase() === 'li') {
-        detailData.currentTitle = (target.getAttribute(
-          'data-xfy-index'
-          // If this was intentional, convert the expression to 'unknown' first.
-          // convertScript 双重无敌断言
-        ) as unknown) as number;
-      }
+    const goodsImgLoad = () => {
+      recoredY();
     };
 
     const {
@@ -95,7 +90,6 @@ export default defineComponent({
       commentInfo,
       recommend,
     } = toRefs(state);
-
     const { currentTitle } = toRefs(detailData);
     return {
       titles,
@@ -108,6 +102,10 @@ export default defineComponent({
       recommend,
       titleClick,
       currentTitle,
+      params,
+      comment,
+      recommendRef,
+      goodsImgLoad,
     };
   },
 });

@@ -129,6 +129,12 @@ export const state: State = reactive({
   },
 });
 
+/**
+ * 详情页数据请求
+ *
+ * @param {string} iid 请求对应id的商品
+ * @return {Object} 接口DetailData
+ */
 export function detailReq(): DetailData {
   const reqDetail = async (iid: string) => {
     const res = await request({
