@@ -1,4 +1,4 @@
-import { reactive } from 'vue';
+import { reactive, computed, ComputedRef } from 'vue';
 import request from '@/hook/network/request';
 
 interface ReqData {
@@ -45,8 +45,10 @@ interface State {
   };
 }
 interface DetailData {
+  state: State;
   reqDetail: (iid: string) => Promise<void>;
   reqRecommend: () => Promise<void>;
+  hasComment: ComputedRef<number>;
 }
 
 class Goods {
@@ -109,26 +111,6 @@ class GoodsParam {
   }
 }
 
-export const state: State = reactive({
-  titles: ['商品', '参数', '评论', '推荐'],
-  topImages: [],
-  goods: {},
-  shop: {},
-  detailInfo: {},
-  paramInfo: {
-    image: '',
-    infos: [],
-    sizes: [],
-  },
-  commentInfo: {},
-  recommend: {
-    goods: {
-      list1: [],
-      list2: [],
-    },
-  },
-});
-
 /**
  * 详情页数据请求
  *
@@ -136,6 +118,26 @@ export const state: State = reactive({
  * @return {Object} 接口DetailData
  */
 export function detailReq(): DetailData {
+  const state: State = reactive({
+    titles: ['商品', '参数', '评论', '推荐'],
+    topImages: [],
+    goods: {},
+    shop: {},
+    detailInfo: {},
+    paramInfo: {
+      image: '',
+      infos: [],
+      sizes: [],
+    },
+    commentInfo: {},
+    recommend: {
+      goods: {
+        list1: [],
+        list2: [],
+      },
+    },
+  });
+
   const reqDetail = async (iid: string) => {
     const res = await request({
       url: '/detail',
@@ -144,7 +146,6 @@ export function detailReq(): DetailData {
       },
     });
     const data: ReqData = res.result;
-    console.log(data);
 
     // 轮播图
     state.topImages = data.itemInfo.topImages;
@@ -164,7 +165,9 @@ export function detailReq(): DetailData {
       data.itemParams.rule
     );
     // 用户评论信息
-    data.rate ? (state.commentInfo = data.rate.list[0]) : void 0;
+    data.rate.list
+      ? (state.commentInfo = data.rate.list[0])
+      : (state.commentInfo = {});
   };
 
   const reqRecommend = async () => {
@@ -178,8 +181,14 @@ export function detailReq(): DetailData {
     state.recommend.goods.list2.push(...p2);
   };
 
+  const hasComment = computed(() => {
+    return Object.keys(state.commentInfo).length;
+  });
+
   return {
+    state,
     reqDetail,
     reqRecommend,
+    hasComment,
   };
 }

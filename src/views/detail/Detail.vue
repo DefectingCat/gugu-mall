@@ -6,9 +6,13 @@
       </svg>
     </template>
     <template #center>
-      <ul class="detail-nav__title" @click="titleClick">
+      <ul class="detail-nav__title" @click="titleClick($event, hasComment)">
         <li
-          :class="{ 'detail-nav__title--active': currentTitle == index }"
+          :class="{
+            'detail-nav__title--active': currentTitle == index,
+            'detail-nav__title--deactive':
+              index == 2 && !Object.keys(commentInfo).length,
+          }"
           v-for="(item, index) of titles"
           :key="item"
           :data-xfy-index="index"
@@ -38,9 +42,8 @@
 import { defineComponent, toRefs } from 'vue';
 import { useRoute } from 'vue-router';
 // network
-import { state, detailReq } from '@/hook/detail/detailEffect';
-import { detailData, imgEffect } from '@/hook/detail/detailImgEffect';
-
+import { detailReq } from '@/hook/detail/detailEffect';
+import { imgEffect } from '@/hook/detail/detailImgEffect';
 // common components
 import navBar from '@/components/common/navBar.vue';
 // vant
@@ -70,15 +73,23 @@ export default defineComponent({
   },
   setup() {
     const route = useRoute();
-
-    const { reqDetail, reqRecommend } = detailReq();
+    const { state, reqDetail, reqRecommend, hasComment } = detailReq();
     reqDetail(route.params.iid as string);
     reqRecommend();
-    const { titleClick, params, comment, recommendRef, recoredY } = imgEffect();
 
+    const {
+      detailData,
+      titleClick,
+      params,
+      comment,
+      recommendRef,
+      recoredY,
+      scrollListener,
+    } = imgEffect();
     const goodsImgLoad = () => {
       recoredY();
     };
+    scrollListener();
 
     const {
       titles,
@@ -106,6 +117,7 @@ export default defineComponent({
       comment,
       recommendRef,
       goodsImgLoad,
+      hasComment,
     };
   },
 });
@@ -129,6 +141,9 @@ export default defineComponent({
     font-size: 14px;
     &--active {
       color: $base-color;
+    }
+    &--deactive {
+      color: rgb(179, 179, 179);
     }
   }
 }
