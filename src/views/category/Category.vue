@@ -18,7 +18,7 @@
       </ul>
     </div>
     <div class="category__right" ref="wrapper">
-      <Subcategories
+      <SubCategories
         :ref="setItemRef"
         v-for="item in subCategories"
         :key="item"
@@ -29,27 +29,19 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  nextTick,
-  onBeforeUpdate,
-  onMounted,
-  onUpdated,
-  toRef,
-  toRefs,
-} from 'vue';
+import { defineComponent, onMounted, toRefs } from 'vue';
 // common components
 import navBar from '@/components/common/navBar.vue';
 // network
 import { reqCategory } from '@/hook/category/categoryEffect';
 import { imgEffect } from '@/hook/category/categoryImgEffect';
 // children
-import Subcategories from './children/SubCategories.vue';
+import SubCategories from './children/SubCategories.vue';
 export default defineComponent({
   name: 'Category',
   components: {
     navBar,
-    Subcategories,
+    SubCategories,
   },
   setup() {
     const { state, getCategoryList, getCategoryData } = reqCategory();
@@ -88,7 +80,7 @@ export default defineComponent({
   display: flex;
   &__left {
     height: calc(100vh - 44px);
-    background: rgb(235, 235, 235);
+    background: #fff;
     overflow-y: scroll;
     &__list {
       display: flex;
@@ -101,6 +93,7 @@ export default defineComponent({
         align-items: center;
         font-size: 14px;
         position: relative;
+        background: rgb(235, 235, 235);
       }
       .list--acitve {
         background: #fff;

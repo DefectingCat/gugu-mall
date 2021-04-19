@@ -1,12 +1,29 @@
-import { reactive, onUpdated, nextTick, onMounted, ref } from 'vue';
+import { reactive, onUpdated, onMounted, onUnmounted, ref, Ref } from 'vue';
 
 type CateData = {
   cateTopYs: number[];
   itemRefs: Record<string, Record<string, number>>[];
   currentIndex: number;
 };
+type ImgEffect = {
+  titleClick: (e: MouseEvent & { target: Element }) => void;
+  cateData: CateData;
+  wrapper: Ref<unknown>;
+  setItemRef: (el: Record<string, Record<string, number>>) => void;
+};
 
-const imgEffect = () => {
+/**
+ * 分类滚动跟踪对应标签
+ *
+ * @param {} type void
+ *
+ * @return {Object} 接口ImgEffect
+ * titleClick: 标签点击方法，切换样式
+ * cateData: 存储标签序号与高度
+ * wrapper: 子分类滚动的父元素
+ * setItemRef: vfor使用ref时推送所有ref
+ */
+const imgEffect = (): ImgEffect => {
   const cateData: CateData = reactive({
     cateTopYs: [],
     itemRefs: [],
@@ -40,6 +57,7 @@ const imgEffect = () => {
     }
   };
   onUpdated(() => {
+    // 保存各个部件的高度
     if (cateData.itemRefs.length) {
       // lazyload 中的 perload 不会触发update，在update中不能获取到正确的高度。
       // 所以需要为subcategory中的图片设置对应的宽和高
@@ -50,6 +68,9 @@ const imgEffect = () => {
   });
   onMounted(() => {
     wrapper.value.addEventListener('scroll', scrollListener);
+  });
+  onUnmounted(() => {
+    wrapper.value.removeEventListener('scroll', scrollListener);
   });
   return {
     titleClick,

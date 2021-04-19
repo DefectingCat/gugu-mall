@@ -1,7 +1,7 @@
 import { reactive, computed, ComputedRef } from 'vue';
 import request from '@/hook/network/request';
 
-interface ReqData {
+type ReqData = {
   columns: string[];
   itemInfo: {
     topImages: string[];
@@ -24,8 +24,8 @@ interface ReqData {
   rate: {
     list: Record<string, unknown>[];
   };
-}
-interface State {
+};
+type State = {
   titles: string[];
   topImages: string[];
   goods: unknown;
@@ -43,13 +43,13 @@ interface State {
       list2: [];
     };
   };
-}
-interface DetailData {
+};
+type DetailData = {
   state: State;
   reqDetail: (iid: string) => Promise<void>;
   reqRecommend: () => Promise<void>;
   hasComment: ComputedRef<number>;
-}
+};
 
 class Goods {
   title;
@@ -116,6 +116,10 @@ class GoodsParam {
  *
  * @param {string} iid 请求对应id的商品
  * @return {Object} 接口DetailData
+ * state: 存储详情页各个数据
+ * reqDetail: 发送详情页ajax
+ * reqRecommend: 发送推荐ajax
+ * hasComment: 判断详情页是否有评论
  */
 export function detailReq(): DetailData {
   const state: State = reactive({

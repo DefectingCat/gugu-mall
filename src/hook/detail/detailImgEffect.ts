@@ -2,11 +2,11 @@ import { reactive, Ref, ref, onMounted, onUnmounted } from 'vue';
 // util
 import { debounce } from '@/hook/common/util';
 
-interface DetailData {
+type DetailData = {
   currentTitle: number;
   themeTopYs: number[];
-}
-interface ImgEffect {
+};
+type ImgEffect = {
   detailData: DetailData;
   titleClick: (e: MouseEvent & { target: Element }, hasComment: number) => void;
   params: Ref<unknown>;
@@ -15,13 +15,19 @@ interface ImgEffect {
   recoredY: () => void;
   imgLoad: () => void;
   scrollListener: () => void;
-}
+};
 
 /**
  * 图片加载完成后通知更新滚动距离
  *
  * @param null
  * @return {Object} 接口ImgEffect
+ * detailData: 存储标签索引以及元素高度
+ * titleClick: 切换标签样式
+ * params、comment、recommendRef: 三个元素对应的ref
+ * recoredY: 记录所有元素的scrollTop
+ * imgLoad: 图片加载load后回调函数
+ * scrollListener: 滚动监听函数
  */
 const imgEffect = (): ImgEffect => {
   const detailData: DetailData = reactive({

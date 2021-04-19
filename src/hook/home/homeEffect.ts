@@ -1,12 +1,12 @@
 import { reactive, toRefs, Ref } from 'vue';
 import request from '@/hook/network/request';
 
-interface GoodsData {
+type GoodsData = {
   page: number;
   list1: Record<string, unknown>[];
   list2: Record<string, unknown>[];
-}
-interface State {
+};
+type State = {
   banners: Record<string, unknown>[];
   recommend: Record<string, unknown>[];
   goods: {
@@ -16,17 +16,17 @@ interface State {
     // 索引签名，通过定义接口用来对对象key的约束
     [key: string]: GoodsData;
   };
-}
-interface ListData {
+};
+type ListData = {
   loading: boolean;
   finished: boolean;
-}
-interface HomeData {
+};
+type HomeData = {
   loading: Ref<boolean>;
   finished: Ref<boolean>;
   reqSwiper: () => Promise<void>;
   reqGoods: (type: string) => Promise<void>;
-}
+};
 
 // 配合动态组件即可实现商品数据的缓存
 export const state: State = reactive({
@@ -57,6 +57,9 @@ export const state: State = reactive({
  * @param {string} type reqGoods 接受一个类型的参数，
  * 请求不同的商品信息
  * @return {Object} 接口HomeData
+ * loading、finished: vant UI list组件做加载判断
+ * reqSwiper: 轮播图ajax
+ * reqGoods: 商品列表ajax
  */
 export function homeRequestEffect(): HomeData {
   const listData: ListData = reactive({
