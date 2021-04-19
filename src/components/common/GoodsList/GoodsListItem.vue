@@ -1,6 +1,6 @@
 <template>
   <div class="item" @click="goodsItemClick">
-    <van-image :src="getImg" alt="" lazy-load />
+    <img :src="getImg" alt="" v-lazy="getImg" />
     <div>
       <p>
         {{ item.title }}
@@ -24,12 +24,12 @@
 import { computed, defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
 // vant
-import { Image } from 'vant';
+// import { Image } from 'vant';
 
 export default defineComponent({
   name: 'GoodsListItem',
   components: {
-    'van-image': Image,
+    // 'van-image': Image,
   },
   props: {
     item: Object,
@@ -60,7 +60,12 @@ export default defineComponent({
 .item {
   font-size: 14px;
   margin-top: 8px;
+  width: 100%;
   :deep(.van-image__img) {
+    width: 100%;
+    border-radius: 8px;
+  }
+  img {
     width: 100%;
     border-radius: 8px;
   }

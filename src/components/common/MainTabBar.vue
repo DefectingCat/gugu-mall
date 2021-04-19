@@ -49,8 +49,6 @@ export default defineComponent({
     // 进入 /detail 页面不显示
     const showBar = computed(() => {
       const pathArr = route.path.split('/');
-      console.log(route.path);
-
       if (pathArr[1] === 'detail') {
         return false;
       }

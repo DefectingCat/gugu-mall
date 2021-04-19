@@ -27,7 +27,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, toRefs, reactive, ref } from 'vue';
+import {
+  defineComponent,
+  onMounted,
+  toRefs,
+  reactive,
+  ref,
+  onActivated,
+} from 'vue';
 // common components
 import navBar from '@/components/common/navBar.vue';
 import GoodsListPOP from '@/components/common/GoodsList/GoodsListPOP.vue';
@@ -42,6 +49,7 @@ import { state, homeRequestEffect } from '@/hook/home/homeEffect';
 import Recommend from './children/Recommend.vue';
 import WeekendRecommend from './children/WeekendRecommend.vue';
 import SwitchTab from './children/SwitchTab.vue';
+import { onBeforeRouteLeave } from 'vue-router';
 
 export default defineComponent({
   name: 'Home',
@@ -64,6 +72,7 @@ export default defineComponent({
       swTabs: ['pop', 'new', 'sell'],
       currentTab: 'pop',
       currentTabComponent: 'GoodsListPOP',
+      scrolledY: 0,
     });
     const swTab = ref();
     onMounted(() => {
@@ -77,6 +86,14 @@ export default defineComponent({
         i
       ].toUpperCase()}`;
     }
+
+    // 切换路由时记录首页滚动的位置
+    onBeforeRouteLeave(() => {
+      homeData.scrolledY = document.documentElement.scrollTop;
+    });
+    onActivated(() => {
+      document.documentElement.scrollTop = homeData.scrolledY;
+    });
 
     const { currentSwTab, swTabs, currentTab, currentTabComponent } = toRefs(
       homeData

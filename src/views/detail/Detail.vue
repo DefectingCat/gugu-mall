@@ -1,9 +1,11 @@
 <template>
   <navBar class="detail-nav">
     <template #left>
-      <svg class="icon" aria-hidden="true">
-        <use xlink:href="#icon-fanhui"></use>
-      </svg>
+      <div class="detail-nav__left" @click="leftClick">
+        <svg class="icon" aria-hidden="true">
+          <use xlink:href="#icon-fanhui"></use>
+        </svg>
+      </div>
     </template>
     <template #center>
       <ul class="detail-nav__title" @click="titleClick($event, hasComment)">
@@ -40,7 +42,7 @@
 
 <script lang="ts">
 import { defineComponent, toRefs } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 // network
 import { detailReq } from '@/hook/detail/detailEffect';
 import { imgEffect } from '@/hook/detail/detailImgEffect';
@@ -73,6 +75,7 @@ export default defineComponent({
   },
   setup() {
     const route = useRoute();
+    const router = useRouter();
     const { state, reqDetail, reqRecommend, hasComment } = detailReq();
     reqDetail(route.params.iid as string);
     reqRecommend();
@@ -90,6 +93,10 @@ export default defineComponent({
       recoredY();
     };
     scrollListener();
+
+    const leftClick = () => {
+      router.go(-1);
+    };
 
     const {
       titles,
@@ -118,6 +125,7 @@ export default defineComponent({
       recommendRef,
       goodsImgLoad,
       hasComment,
+      leftClick,
     };
   },
 });
@@ -130,6 +138,13 @@ export default defineComponent({
   background-color: #fff;
   // backdrop-filter: blur(5px);
   z-index: 10;
+  &__left {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+  }
   & .icon {
     width: 20px;
     height: 20px;

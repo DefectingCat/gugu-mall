@@ -73,6 +73,7 @@ const imgEffect = (): ImgEffect => {
   const imgLoaded = (): void => {
     recoredY();
   };
+  // 图片加载完成后记录 top 值
   const imgLoad = debounce(imgLoaded, 100);
 
   const scrollListener = (): void => {
