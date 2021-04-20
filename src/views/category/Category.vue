@@ -12,6 +12,7 @@
           :key="item.title"
           :class="{ 'list--acitve': index == currentIndex }"
           :data-xfy-index="index"
+          :ref="setListRef"
         >
           {{ item.title }}
         </li>
@@ -50,7 +51,13 @@ export default defineComponent({
       getCategoryData();
     });
 
-    const { cateData, wrapper, setItemRef, titleClick } = imgEffect();
+    const {
+      cateData,
+      wrapper,
+      setItemRef,
+      titleClick,
+      setListRef,
+    } = imgEffect();
     const { cateTopYs, currentIndex, itemRefs } = toRefs(cateData);
 
     const { categories, subCategories } = toRefs(state);
@@ -63,6 +70,7 @@ export default defineComponent({
       cateTopYs,
       wrapper,
       itemRefs,
+      setListRef,
     };
   },
 });
@@ -80,11 +88,12 @@ export default defineComponent({
   display: flex;
   &__left {
     height: calc(100vh - 44px);
-    background: #fff;
+    background: rgb(235, 235, 235);
     overflow-y: scroll;
     &__list {
       display: flex;
       flex-direction: column;
+      background: #fff;
       li {
         display: flex;
         height: 45px;
