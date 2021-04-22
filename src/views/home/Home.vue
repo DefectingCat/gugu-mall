@@ -30,14 +30,7 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  onMounted,
-  toRefs,
-  reactive,
-  ref,
-  onActivated,
-} from 'vue';
+import { defineComponent, onMounted, toRefs } from 'vue';
 // common components
 import navBar from '@/components/common/navBar.vue';
 import GoodsListPOP from '@/components/common/GoodsList/GoodsListPOP.vue';
@@ -46,13 +39,15 @@ import GoodsListSELL from '@/components/common/GoodsList/GoodsListSELL.vue';
 import GoTop from '@/components/common/GoTop.vue';
 // vant
 import { Swipe, SwipeItem } from 'vant';
-// network
+// hook
 import { state, homeRequestEffect } from '@/hook/home/homeEffect';
+import homeLogic from '@/hook/home/homeLogic';
+// common hook
+import recordScroll from '@/hook/common/recordScroll';
 // child components
 import Recommend from './children/Recommend.vue';
 import WeekendRecommend from './children/WeekendRecommend.vue';
 import SwitchTab from './children/SwitchTab.vue';
-import { onBeforeRouteLeave } from 'vue-router';
 
 export default defineComponent({
   name: 'Home',
@@ -70,32 +65,13 @@ export default defineComponent({
   },
   setup() {
     const { reqSwiper } = homeRequestEffect();
-    const homeData = reactive({
-      currentSwTab: 0,
-      swTabs: ['pop', 'new', 'sell'],
-      currentTab: 'pop',
-      currentTabComponent: 'GoodsListPOP',
-      scrolledY: 0,
-    });
-    const swTab = ref();
-    onMounted(() => {
-      reqSwiper();
-    });
-    // SwitchTab emit 的点击
-    function swTabClick(i: number): void {
-      homeData.currentSwTab = i;
-      homeData.currentTab = homeData.swTabs[i];
-      homeData.currentTabComponent = `GoodsList${homeData.swTabs[
-        i
-      ].toUpperCase()}`;
-    }
+    const { homeData, swTab, swTabClick } = homeLogic();
+    // 记录滚动位置
+    recordScroll();
 
-    // 切换路由时记录首页滚动的位置
-    onBeforeRouteLeave(() => {
-      homeData.scrolledY = document.documentElement.scrollTop;
-    });
-    onActivated(() => {
-      document.documentElement.scrollTop = homeData.scrolledY;
+    onMounted(() => {
+      // 请求轮播图
+      reqSwiper();
     });
 
     const { currentSwTab, swTabs, currentTab, currentTabComponent } = toRefs(

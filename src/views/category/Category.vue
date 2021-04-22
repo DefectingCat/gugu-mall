@@ -33,9 +33,11 @@
 import { defineComponent, onMounted, toRefs } from 'vue';
 // common components
 import navBar from '@/components/common/navBar.vue';
-// network
+// hook
 import { reqCategory } from '@/hook/category/categoryEffect';
 import { imgEffect } from '@/hook/category/categoryImgEffect';
+// common hook
+import recordScroll from '@/hook/common/recordScroll';
 // children
 import SubCategories from './children/SubCategory.vue';
 export default defineComponent({
@@ -60,6 +62,9 @@ export default defineComponent({
       setListRef,
     } = imgEffect();
     const { cateTopYs, currentIndex, itemRefs } = toRefs(cateData);
+
+    // 记录滚动位置
+    recordScroll(wrapper);
 
     return {
       categories,

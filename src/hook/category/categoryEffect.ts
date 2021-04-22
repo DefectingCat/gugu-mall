@@ -31,7 +31,6 @@ const reqCategory = (): ReqCategory => {
       delete res.use;
       delete res._id;
     }
-    console.log(res);
     state.subCategories = res;
   };
 
