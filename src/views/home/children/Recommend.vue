@@ -30,10 +30,13 @@ export default defineComponent({
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  margin: 15px 0 10px 0;
-  padding: 0 0 15px 0;
+  margin: 10px 0;
+  border-radius: 10px;
+  padding: 10px 0;
   font-size: 12px;
-  border-bottom: 9px solid rgba(219, 219, 219, 0.651);
+  // border-bottom: 9px solid rgba(219, 219, 219, 0.651);
+  box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.15);
+  background: #fff;
   &__item {
     text-align: center;
     width: 25%;
@@ -44,6 +47,7 @@ export default defineComponent({
     }
     img {
       width: 70px;
+      height: 70px;
       margin-bottom: 5px;
     }
   }

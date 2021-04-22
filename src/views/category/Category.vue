@@ -37,7 +37,7 @@ import navBar from '@/components/common/navBar.vue';
 import { reqCategory } from '@/hook/category/categoryEffect';
 import { imgEffect } from '@/hook/category/categoryImgEffect';
 // children
-import SubCategories from './children/SubCategories.vue';
+import SubCategories from './children/SubCategory.vue';
 export default defineComponent({
   name: 'Category',
   components: {
@@ -50,6 +50,7 @@ export default defineComponent({
       getCategoryList();
       getCategoryData();
     });
+    const { categories, subCategories } = toRefs(state);
 
     const {
       cateData,
@@ -60,7 +61,6 @@ export default defineComponent({
     } = imgEffect();
     const { cateTopYs, currentIndex, itemRefs } = toRefs(cateData);
 
-    const { categories, subCategories } = toRefs(state);
     return {
       categories,
       currentIndex,

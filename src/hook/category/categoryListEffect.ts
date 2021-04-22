@@ -1,4 +1,4 @@
-import { reactive, onUpdated, nextTick } from 'vue';
+import { reactive } from 'vue';
 
 type ListData = {
   listRefs: HTMLElement[];

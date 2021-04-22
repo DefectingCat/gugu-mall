@@ -5,14 +5,17 @@
     </template>
   </navBar>
 
-  <Swipe class="swiper" :autoplay="3000" indicator-color="white" lazy-render>
-    <SwipeItem v-for="item of banners" :key="item.acm">
-      <img :src="item.image" alt="" />
-    </SwipeItem>
-  </Swipe>
+  <div class="wrapper">
+    <Swipe class="swiper" :autoplay="3000" indicator-color="white" lazy-render>
+      <SwipeItem v-for="item of banners" :key="item.acm">
+        <img :src="item.image" alt="" />
+      </SwipeItem>
+    </Swipe>
 
-  <Recommend :recommends="recommend" />
-  <WeekendRecommend />
+    <Recommend :recommends="recommend" />
+    <WeekendRecommend />
+  </div>
+
   <SwitchTab
     :titles="['流行', '新款', '精选']"
     @swTabClick="swTabClick"
@@ -113,6 +116,9 @@ export default defineComponent({
 });
 </script>
 <style scoped lang="scss">
+.wrapper {
+  padding: 0px 6px;
+}
 .home-nav {
   position: sticky;
   top: 0;
@@ -121,8 +127,13 @@ export default defineComponent({
   z-index: 10;
 }
 .swiper {
+  margin-top: 4px;
+  border-radius: 10px;
+  height: 192px;
+  // box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
   img {
-    width: 375px;
+    border-radius: 10px;
+    width: 100%;
   }
 }
 .go-top {
