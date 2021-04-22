@@ -35,7 +35,7 @@ export default defineComponent({
   padding: 10px 0;
   font-size: 12px;
   // border-bottom: 9px solid rgba(219, 219, 219, 0.651);
-  box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.15);
+  // box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.15);
   background: #fff;
   &__item {
     text-align: center;

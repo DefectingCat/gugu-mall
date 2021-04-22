@@ -1,6 +1,6 @@
 <template>
   <transition name="top">
-    <div class="wrapper" v-show="showGoTop" @click="topClick">
+    <div class="gotop-wrapper" v-show="showGoTop" @click="topClick">
       <svg class="icon" aria-hidden="true">
         <use xlink:href="#icon-shang"></use>
       </svg>
@@ -61,7 +61,7 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-.wrapper {
+.gotop-wrapper {
   position: absolute;
   right: 10px;
   display: flex;

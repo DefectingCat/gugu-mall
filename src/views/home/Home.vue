@@ -5,7 +5,7 @@
     </template>
   </navBar>
 
-  <div class="wrapper">
+  <div class="home-wrapper">
     <Swipe class="swiper" :autoplay="3000" indicator-color="white" lazy-render>
       <SwipeItem v-for="item of banners" :key="item.acm">
         <img :src="item.image" alt="" />
@@ -74,9 +74,14 @@ export default defineComponent({
       reqSwiper();
     });
 
-    const { currentSwTab, swTabs, currentTab, currentTabComponent } = toRefs(
-      homeData
-    );
+    const {
+      currentSwTab,
+      swTabs,
+      currentTab,
+      currentTabComponent,
+      currentSwY,
+      swScrollY,
+    } = toRefs(homeData);
     const { banners, recommend } = toRefs(state);
     return {
       banners,
@@ -87,12 +92,14 @@ export default defineComponent({
       currentTabComponent,
       swTabClick,
       swTab,
+      currentSwY,
+      swScrollY,
     };
   },
 });
 </script>
 <style scoped lang="scss">
-.wrapper {
+.home-wrapper {
   padding: 0px 6px;
 }
 .home-nav {
