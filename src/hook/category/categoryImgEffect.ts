@@ -1,20 +1,13 @@
-import { reactive, onUpdated, onMounted, onUnmounted, ref, Ref } from 'vue';
-
-type CateData = {
-  cateTopYs: number[];
-  itemRefs: Record<string, Record<string, number>>[];
-  currentIndex: number;
-  listRefs: HTMLElement[];
-  prePrevious: HTMLElement;
-  preNext: HTMLElement;
-};
-type ImgEffect = {
-  titleClick: (e: MouseEvent & { target: Element }) => void;
-  cateData: CateData;
-  wrapper: Ref<unknown>;
-  setItemRef: (el: Record<string, Record<string, number>>) => void;
-  setListRef: (el: HTMLElement) => void;
-};
+import {
+  reactive,
+  onUpdated,
+  onMounted,
+  onUnmounted,
+  ref,
+  nextTick,
+} from 'vue';
+// types
+import { CateData, ImgEffect } from '@/types/category';
 
 /**
  * 分类滚动跟踪对应标签&小圆角
@@ -76,7 +69,8 @@ const imgEffect = (): ImgEffect => {
     }
   };
 
-  onUpdated(() => {
+  onUpdated(async () => {
+    await nextTick();
     // 保存各个部件的高度
     if (cateData.itemRefs.length && cateData.cateTopYs.length < 16) {
       // lazyload 中的 perload 不会触发update，在update中不能获取到正确的高度。

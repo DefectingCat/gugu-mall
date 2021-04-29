@@ -1,15 +1,7 @@
 import request from '@/hook/network/request';
 import { reactive } from 'vue';
-
-type State = {
-  categories: Record<string, unknown>[];
-  subCategories: Record<string, unknown>;
-};
-type ReqCategory = {
-  state: State;
-  getCategoryList: () => Promise<void>;
-  getCategoryData: () => Promise<void>;
-};
+// types
+import { ReqCategory } from '@/types/category';
 
 const reqCategory = (): ReqCategory => {
   const state = reactive({

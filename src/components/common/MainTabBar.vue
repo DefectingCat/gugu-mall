@@ -72,7 +72,7 @@ export default defineComponent({
   height: 54px;
   background-color: rgba(201, 201, 201, 0.3);
   position: fixed;
-  bottom: 2%;
+  bottom: 1%;
   left: 0;
   right: 0;
   backdrop-filter: blur(5px);

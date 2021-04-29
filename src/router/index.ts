@@ -22,6 +22,12 @@ const routes: Array<RouteRecordRaw> = [
       ),
   },
   {
+    path: '/cart',
+    name: 'Cart',
+    component: () =>
+      import(/* webpackChunkName: "category" */ '../views/cart/Cart.vue'),
+  },
+  {
     path: '/about',
     name: 'About',
     // route level code-splitting

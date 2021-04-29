@@ -37,7 +37,7 @@
   <DetailParams ref="params" :paramInfo="paramInfo" />
   <DetailComment ref="comment" :commentInfo="commentInfo" />
   <DetailRecommend ref="recommendRef" :recommend="recommend" />
-  <DetailActionBar />
+  <DetailActionBar @addToCart="addToCart" />
 </template>
 
 <script lang="ts">
@@ -58,6 +58,10 @@ import DetailParams from './children/DetailParams.vue';
 import DetailComment from './children/DetailComment.vue';
 import DetailRecommend from './children/DetailRecommend.vue';
 import DetailActionBar from './children/DetailActionBar.vue';
+// vuex
+import { useStore } from 'vuex';
+// types
+import { CartObj } from '@/types/detail';
 
 export default defineComponent({
   name: 'Detail',
@@ -76,9 +80,22 @@ export default defineComponent({
   setup() {
     const route = useRoute();
     const router = useRouter();
+    const store = useStore();
+
     const { state, reqDetail, reqRecommend, hasComment } = detailReq();
-    reqDetail(route.params.iid as string);
+    reqDetail(route.params.iid);
     reqRecommend();
+    const {
+      iid,
+      titles,
+      topImages,
+      goods,
+      shop,
+      detailInfo,
+      paramInfo,
+      commentInfo,
+      recommend,
+    } = toRefs(state);
 
     const {
       detailData,
@@ -93,22 +110,25 @@ export default defineComponent({
       recoredY();
     };
     scrollListener();
+    const { currentTitle } = toRefs(detailData);
 
     const leftClick = () => {
       router.go(-1);
     };
 
-    const {
-      titles,
-      topImages,
-      goods,
-      shop,
-      detailInfo,
-      paramInfo,
-      commentInfo,
-      recommend,
-    } = toRefs(state);
-    const { currentTitle } = toRefs(detailData);
+    const addToCart = () => {
+      const obj: CartObj = {
+        iid: iid.value,
+        imgURL: topImages.value[0],
+        title: goods.value.title,
+        desc: goods.value.desc,
+        nowPrice: goods.value.nowPrice,
+        price: 0,
+        count: 1,
+      };
+      store.commit('addCart', obj);
+    };
+
     return {
       titles,
       topImages,
@@ -126,6 +146,7 @@ export default defineComponent({
       goodsImgLoad,
       hasComment,
       leftClick,
+      addToCart,
     };
   },
 });

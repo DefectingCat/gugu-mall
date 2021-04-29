@@ -1,32 +1,7 @@
-import { reactive, toRefs, Ref } from 'vue';
+import { reactive, toRefs } from 'vue';
 import request from '@/hook/network/request';
-
-type GoodsData = {
-  page: number;
-  list1: Record<string, unknown>[];
-  list2: Record<string, unknown>[];
-};
-type State = {
-  banners: Record<string, unknown>[];
-  recommend: Record<string, unknown>[];
-  goods: {
-    pop: GoodsData;
-    new: GoodsData;
-    sell: GoodsData;
-    // 索引签名，通过定义接口用来对对象key的约束
-    [key: string]: GoodsData;
-  };
-};
-type ListData = {
-  loading: boolean;
-  finished: boolean;
-};
-type HomeData = {
-  loading: Ref<boolean>;
-  finished: Ref<boolean>;
-  reqSwiper: () => Promise<void>;
-  reqGoods: (type: string) => Promise<void>;
-};
+// types
+import { State, ListData, HomeData } from '@/types/home';
 
 // 配合动态组件即可实现商品数据的缓存
 export const state: State = reactive({

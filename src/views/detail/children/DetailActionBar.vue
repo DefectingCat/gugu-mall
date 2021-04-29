@@ -3,7 +3,7 @@
     <ActionBarIcon icon="chat-o" text="客服" color="#ee0a24" />
     <ActionBarIcon icon="shop-o" text="店铺" />
     <ActionBarIcon icon="star-o" text="收藏" />
-    <ActionBarButton type="warning" text="加入购物车" />
+    <ActionBarButton type="warning" text="加入购物车" @click="addToCart" />
     <ActionBarButton type="danger" text="立即购买" />
   </ActionBar>
 </template>
@@ -18,6 +18,14 @@ export default defineComponent({
     ActionBar,
     ActionBarIcon,
     ActionBarButton,
+  },
+  setup(props, { emit }) {
+    const addToCart = () => {
+      emit('addToCart');
+    };
+    return {
+      addToCart,
+    };
   },
 });
 </script>
