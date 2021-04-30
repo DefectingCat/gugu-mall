@@ -1,9 +1,9 @@
 <template>
   <SwipeCell>
     <div class="cart-item">
-      <div class="cart-item__check-point">
+      <div class="cart-item__check-point" @click="checkClick">
         <svg class="icon" aria-hidden="true">
-          <use xlink:href="#icon-gouxuan"></use>
+          <use :xlink:href="showCheck"></use>
         </svg>
       </div>
       <Card :thumb="cart.imgURL">
@@ -21,11 +21,18 @@
 
         <template #num>
           <div class="cart-item__num">
-            <svg class="icon" aria-hidden="true">
+            <!-- 减少按钮 -->
+            <svg
+              class="icon"
+              aria-hidden="true"
+              v-show="cart.count > 1"
+              @click="modifyItem(false)"
+            >
               <use xlink:href="#icon-jian"></use>
             </svg>
             <span>{{ cart.count }}</span>
-            <svg class="icon" aria-hidden="true">
+            <!-- 添加按钮 -->
+            <svg class="icon" aria-hidden="true" @click="modifyItem">
               <use xlink:href="#icon-jia"></use>
             </svg>
           </div>
@@ -40,13 +47,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { computed, defineComponent, PropType, toRefs } from 'vue';
 // vant
 import { SwipeCell } from 'vant';
 import { Card } from 'vant';
 import { Button } from 'vant';
 // types
 import { CartObj } from '@/types/detail';
+import { useStore } from 'vuex';
 export default defineComponent({
   name: 'Cart',
   components: {
@@ -58,6 +66,29 @@ export default defineComponent({
     cart: {
       type: Object as PropType<CartObj>,
     },
+  },
+  setup(props) {
+    const store = useStore();
+    const { cart } = toRefs(props);
+
+    const showCheck = computed(() => {
+      if (cart?.value?.checked) {
+        return '#icon-gouxuan1';
+      }
+      return '#icon-gouxuan';
+    });
+
+    const checkClick = () => {
+      store.commit('checkItem', cart?.value);
+    };
+    const modifyItem = (add = true) => {
+      store.commit('creaceItem', { obj: cart?.value, add });
+    };
+    return {
+      showCheck,
+      checkClick,
+      modifyItem,
+    };
   },
 });
 </script>

@@ -62,7 +62,6 @@ export function detailReq(): DetailData {
       data.columns,
       data.shopInfo.services
     );
-    console.log(state.goods);
 
     // 店铺信息
     state.shop = new Shop(data.shopInfo);

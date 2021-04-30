@@ -128,6 +128,7 @@ export type CartObj = {
   title: string | undefined;
   desc: string | undefined;
   nowPrice: string | undefined;
-  price: number;
+  price: string | undefined;
   count: number;
+  checked: boolean;
 };

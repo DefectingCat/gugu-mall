@@ -123,8 +123,9 @@ export default defineComponent({
         title: goods.value.title,
         desc: goods.value.desc,
         nowPrice: goods.value.nowPrice,
-        price: 0,
+        price: goods.value.nowPrice,
         count: 1,
+        checked: false,
       };
       store.commit('addCart', obj);
     };
