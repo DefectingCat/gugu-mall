@@ -1,8 +1,4 @@
 <template>
-  <!-- <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div> -->
   <router-view v-slot="{ Component }">
     <keep-alive exclude="Detail">
       <component :is="Component" />
@@ -13,9 +9,19 @@
 
 <script lang="ts">
 import MainTabBar from '@/components/common/MainTabBar.vue';
+// vuex
+import { useStore } from 'vuex';
 export default {
   components: {
     MainTabBar,
+  },
+  setup(): void {
+    const store = useStore();
+    // 先检查 localStorage 是否有数据
+    const localList = localStorage.getItem('cartList');
+    if (localList) {
+      store.commit('restoreLocal', JSON.parse(localList));
+    }
   },
 };
 </script>

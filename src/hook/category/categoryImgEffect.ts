@@ -37,7 +37,7 @@ const imgEffect = (): ImgEffect => {
     const index = e.target.getAttribute('data-xfy-index');
     // cateData.currentIndex = (index as unknown) as number;
     wrapper.value.scrollTo({
-      top: cateData.cateTopYs[(index as unknown) as number],
+      top: cateData.cateTopYs[index as unknown as number],
       behavior: 'smooth',
     });
   };

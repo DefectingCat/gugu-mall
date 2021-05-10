@@ -41,7 +41,13 @@
     </div>
 
     <template #right>
-      <Button square type="danger" text="删除" class="delete-button" />
+      <Button
+        square
+        type="danger"
+        text="删除"
+        class="delete-button"
+        @click="deleteItem"
+      />
     </template>
   </SwipeCell>
 </template>
@@ -84,10 +90,14 @@ export default defineComponent({
     const modifyItem = (add = true) => {
       store.commit('creaceItem', { obj: cart?.value, add });
     };
+    const deleteItem = () => {
+      store.commit('deleteItem', cart?.value);
+    };
     return {
       showCheck,
       checkClick,
       modifyItem,
+      deleteItem,
     };
   },
 });

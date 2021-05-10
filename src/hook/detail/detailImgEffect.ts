@@ -44,7 +44,7 @@ const imgEffect = (): ImgEffect => {
     hasComment: number
   ) => {
     const target = e.target;
-    const Y = (target.getAttribute('data-xfy-index') as unknown) as number;
+    const Y = target.getAttribute('data-xfy-index') as unknown as number;
 
     if (target.nodeName.toLowerCase() === 'li') {
       if (!hasComment && Y == 2) {

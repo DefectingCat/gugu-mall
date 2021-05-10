@@ -54,13 +54,8 @@ export default defineComponent({
     });
     const { categories, subCategories } = toRefs(state);
 
-    const {
-      cateData,
-      wrapper,
-      setItemRef,
-      titleClick,
-      setListRef,
-    } = imgEffect();
+    const { cateData, wrapper, setItemRef, titleClick, setListRef } =
+      imgEffect();
     const { cateTopYs, currentIndex, itemRefs } = toRefs(cateData);
 
     // 记录滚动位置

@@ -6,7 +6,13 @@
       </template>
     </navBar>
 
-    <CartList v-for="item of cartList" :key="item.iid" :cart="item" />
+    <div v-if="cartList.length">
+      <CartList v-for="item of cartList" :key="item.iid" :cart="item" />
+      <CartActionBar class="action-bar" :cartList="cartList" />
+    </div>
+    <div v-else>
+      <Empty description="这里空空的哟~" />
+    </div>
   </div>
 </template>
 
@@ -16,13 +22,18 @@ import { defineComponent, computed } from 'vue';
 import navBar from '@/components/common/navBar.vue';
 // children
 import CartList from './children/CartList.vue';
+import CartActionBar from './children/CartActionBar.vue';
 // vuex
 import { useStore } from 'vuex';
+// vant
+import { Empty } from 'vant';
 export default defineComponent({
   name: 'Cart',
   components: {
     navBar,
     CartList,
+    CartActionBar,
+    Empty,
   },
   setup() {
     const store = useStore();
@@ -45,5 +56,12 @@ export default defineComponent({
   background-color: rgba(201, 201, 201, 0.3);
   backdrop-filter: blur(5px);
   z-index: 10;
+}
+.action-bar {
+  position: fixed;
+  bottom: 67px;
+  left: 0;
+  right: 0;
+  margin: auto;
 }
 </style>
