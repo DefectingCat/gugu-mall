@@ -6,8 +6,8 @@
       </svg>
     </div>
     <span>全选</span>
-    <span class="bar-wrap__tPrice">总价:{{ totalPrice }}</span>
-    <span class="bar-wrap__settle">去结算</span>
+    <span class="bar-wrap__tPrice">总价:￥{{ totalPrice }}</span>
+    <span class="bar-wrap__settle">结算</span>
   </div>
 </template>
 
@@ -104,8 +104,21 @@ export default defineComponent({
   }
   &__tPrice {
     margin-left: auto;
+    margin-right: 10px;
   }
-  // &__settle {
-  // }
+  &__settle {
+    display: inline-block;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 10px;
+    height: 34px;
+    line-height: 34px;
+    // border: 1px solid black;
+    background: #ffe6ef8f;
+    backdrop-filter: blur(5px);
+  }
+  &__settle:active {
+    background: #fcccde8f;
+  }
 }
 </style>
