@@ -61,6 +61,10 @@ export default defineComponent({
   font-size: 14px;
   margin-top: 8px;
   width: 100%;
+  // 视口相交动画
+  transform: translateY(35px);
+  opacity: 0;
+  transition: all 0.2s ease;
   :deep(.van-image__img) {
     width: 100%;
     border-radius: 8px;

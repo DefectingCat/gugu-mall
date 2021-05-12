@@ -20,6 +20,7 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .head-wrap {
+  font-family: 'Ubuntu';
   position: relative;
   background: black;
   // background-color: rgb(230, 230, 230);

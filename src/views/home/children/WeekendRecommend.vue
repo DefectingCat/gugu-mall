@@ -3,7 +3,11 @@
     <span class="weekly-recom__title">本周推荐</span>
     <div class="weekly-recom__icon">
       <div class="weekly-recom__icon__img" v-for="item of icon" :key="item.id">
-        <img :src="require(`@/assets/img/home/r${item.id}.png`)" alt="" />
+        <img
+          :src="require(`@/assets/img/home/r${item.id}.png`)"
+          alt=""
+          v-lazy="require(`@/assets/img/home/r${item.id}.png`)"
+        />
         <span>{{ item.name }}</span>
       </div>
     </div>

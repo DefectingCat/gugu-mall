@@ -1,16 +1,22 @@
 <template>
   <div class="body-wrap">
     <div class="body-content">
+      <!-- 头像部分 -->
       <div class="body-content__head">
         <svg class="icon icon-left" aria-hidden="true">
           <use xlink:href="#icon-shezhi1"></use>
         </svg>
-        <img src="@/assets/img/profile/avatar.png" alt="" />
+        <img
+          src="@/assets/img/profile/avatar.png"
+          alt=""
+          v-lazy="require(`@/assets/img/profile/avatar.png`)"
+        />
         <svg class="icon icon-right" aria-hidden="true">
           <use xlink:href="#icon-bianji2"></use>
         </svg>
       </div>
 
+      <!-- id 部分 -->
       <div class="body-content__info">
         <span>Arthur</span>
         <span>i@defect.ink</span>
@@ -18,9 +24,16 @@
 
       <div class="hr"></div>
 
+      <!-- 列表部分 -->
       <div class="body-content__list">
-        <ul>
-          <li v-for="item of listMsg" :key="item.id" class="list-item">
+        <ul @click="listClick">
+          <li
+            v-for="item of listMsg"
+            :key="item.id"
+            class="list-item"
+            :ref="setListItem"
+            :data-xfy-id="item.id"
+          >
             <svg class="icon list-item__icon-left" aria-hidden="true">
               <use :xlink:href="item.icon"></use>
             </svg>
@@ -31,32 +44,59 @@
           </li>
         </ul>
       </div>
+      <!-- 列表 end -->
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from 'vue';
+import { defineComponent, nextTick, onMounted } from 'vue';
+// hook
+import { profileAnimation } from '@/hook/profile/animation';
+import { profileEffect } from '@/hook/profile/effect';
 export default defineComponent({
   name: 'ProfileCart',
   setup() {
-    const listMsg = reactive([
-      { id: 1, msg: '我的消息', icon: '#icon-xiaoxi' },
-      { id: 2, msg: '我的会员', icon: '#icon-huiyuan' },
-      { id: 3, msg: '积分商城', icon: '#icon-jifen' },
-      { id: 4, msg: '问候咸鱼作者', icon: '#icon-yu' },
-      { id: 4, msg: '看看咸鱼其他项目', icon: '#icon-qitazhengquan' },
-    ]);
+    // 数据与点击
+    const { listMsg, listClick } = profileEffect();
+
+    // 过渡动画
+    const { setListItem, listAnimat } = profileAnimation();
+    onMounted(async () => {
+      await nextTick();
+      listAnimat();
+    });
+
     return {
       listMsg,
+      listClick,
+      setListItem,
     };
   },
 });
 </script>
 
 <style scoped lang="scss">
+@keyframes slidein {
+  from {
+    transform: translateY(10px);
+  }
+  to {
+    transform: translateY(-20px);
+  }
+}
+@keyframes spin {
+  from {
+    transform: translateY(5px);
+  }
+  to {
+    transform: translateY(-25px);
+  }
+}
+
 .body-wrap {
   padding: 0 15px;
+  font-family: 'Ubuntu';
 }
 
 .body-content {
@@ -65,8 +105,11 @@ export default defineComponent({
   background-color: rgba(230, 230, 230, 0.404);
   backdrop-filter: blur(5px);
   border-radius: 12px;
+  animation: 0.7s slidein;
   transform: translateY(-20px);
+  // transform: translateY(0px);
   box-shadow: 1px 1px 20px rgba(134, 134, 134, 0.521);
+  transition: all 0.3s ease;
   &__head {
     display: flex;
     justify-content: space-between;
@@ -82,6 +125,7 @@ export default defineComponent({
       background-color: rgba(201, 201, 201, 0.404);
       backdrop-filter: blur(5px);
       transform: translateY(-25px);
+      animation: 0.7s spin;
       // position: absolute;
       // left: 50%;
       // top: -50px;
@@ -119,11 +163,14 @@ export default defineComponent({
 
   &__list {
     padding: 20px 18px;
+    color: #3a3939;
     .list-item {
       display: flex;
       height: 50px;
       align-items: center;
-      font-size: 17px;
+      font-size: 16px;
+      transform: translateY(40px);
+      opacity: 0;
       &__icon-left {
         width: 20px;
         height: 20px;

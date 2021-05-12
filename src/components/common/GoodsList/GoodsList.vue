@@ -7,6 +7,7 @@
         v-for="item of goods[currentTab].list1"
         :key="item"
         :item="item"
+        :ref="setList1Ref"
       />
     </div>
     <div class="goods-list__col">
@@ -15,6 +16,7 @@
         v-for="item of goods[currentTab].list2"
         :key="item"
         :item="item"
+        :ref="setList2Ref"
       />
     </div>
   </div>
@@ -32,6 +34,35 @@ export default defineComponent({
   props: {
     currentTab: String,
     goods: Object,
+  },
+  setup() {
+    // 使用 Intersection Observer API 来监听项目是否和视口相交
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          // 断言为 HTMLElement 才可操作 style
+          const target = entry.target as HTMLElement;
+          setTimeout(() => {
+            target.style.transform = `translateY(0px)`;
+            target.style.opacity = `1`;
+          }, 300);
+          // 动画完成后取消监听
+          observer.unobserve(entry.target);
+        }
+      });
+    });
+    // vfor 循环中使用两个方法添加列表监听
+    const setList1Ref = (el: { $el: HTMLElement }) => {
+      el ? observer.observe(el.$el) : void 0;
+    };
+    const setList2Ref = (el: { $el: HTMLElement }) => {
+      el ? observer.observe(el.$el) : void 0;
+    };
+
+    return {
+      setList1Ref,
+      setList2Ref,
+    };
   },
 });
 </script>

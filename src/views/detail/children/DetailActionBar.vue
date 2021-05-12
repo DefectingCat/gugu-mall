@@ -11,7 +11,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 // vant
-import { ActionBar, ActionBarIcon, ActionBarButton } from 'vant';
+import { ActionBar, ActionBarIcon, ActionBarButton, Toast } from 'vant';
 export default defineComponent({
   name: 'DetailActionBar',
   components: {
@@ -22,6 +22,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const addToCart = () => {
       emit('addToCart');
+      Toast.success('添加成功');
     };
     return {
       addToCart,
