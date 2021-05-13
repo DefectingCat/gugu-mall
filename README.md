@@ -15,7 +15,7 @@
 
 ## 预览
 
-[Demo🎃](https://demo.defectink.com/gugu/) | [Demo on Netlify](https://gugu.rua.plus)
+[Demo🎃](https://demo.defectink.com/gugu/) | [Demo on Netlify](https://rua.plus/gugu/)
 
 用的一些技术都是比较激进的，也就没有考虑兼容旧的浏览器了，顺便用上了原生滚动。在事件监听方面，也尽可能的使用了事件代理尝试提示性能。
 
