@@ -1,3 +1,10 @@
+type Debounce = {
+  <T extends unknown[]>(fn: (...arg: T) => void | unknown, ms: number): (
+    this: unknown,
+    ...arg: T
+  ) => void | unknown;
+};
+
 /**
  * debounce function wrapper
  *
@@ -5,12 +12,11 @@
  * @param {number} ms delay millisecond
  * @return {function} wrapper
  *
- * 但是这里的参数依然不起作用，待修改。
  */
-export const debounce = (fn: () => void, ms: number): (() => void) => {
+export const debounce: Debounce = (fn, ms) => {
   let timer: number | null = null;
   // 需要为this注解类型
-  return function (this: Record<string, unknown> | void, ...args: []) {
+  return function (...args) {
     if (timer) clearTimeout(timer);
     timer = setTimeout(() => {
       fn.apply(this, args);
