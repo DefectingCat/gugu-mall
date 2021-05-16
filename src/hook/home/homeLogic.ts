@@ -40,6 +40,7 @@ const homeLogic = (): HomeLogic => {
   const swTab = ref();
 
   onUpdated(async () => {
+    // 首页 DOM 加载完成后，记录 swTab 距离顶部的距离。
     await nextTick();
     if (swTab.value) {
       homeData.currentSwY = swTab.value.$el.offsetTop - 44;

@@ -71,6 +71,9 @@ const imgEffect = (): ImgEffect => {
 
   onUpdated(async () => {
     await nextTick();
+    /*
+     * 只要响应式数据没有在实际 DOM 中，则更新对应的数据是不会再次触发 updated。
+     */
     // 保存各个部件的高度
     if (cateData.itemRefs.length && cateData.cateTopYs.length < 16) {
       // lazyload 中的 perload 不会触发update，在update中不能获取到正确的高度。

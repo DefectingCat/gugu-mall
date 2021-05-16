@@ -56,7 +56,7 @@ export default defineComponent({
 
     const { cateData, wrapper, setItemRef, titleClick, setListRef } =
       imgEffect();
-    const { cateTopYs, currentIndex, itemRefs } = toRefs(cateData);
+    const { currentIndex } = toRefs(cateData);
 
     // 记录滚动位置
     recordScroll(wrapper);
@@ -67,9 +67,7 @@ export default defineComponent({
       subCategories,
       titleClick,
       setItemRef,
-      cateTopYs,
       wrapper,
-      itemRefs,
       setListRef,
     };
   },
